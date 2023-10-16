@@ -1,0 +1,13 @@
+.forgotBtn {
+  background-color: rgb(var(--main-color));
+  height: 2.6rem;
+}
+.googleBtn {
+  color: black;
+  border-color: black;
+  height: 2.6rem;
+}
+
+.googleImg{
+    margin-right: 0.3rem;
+}

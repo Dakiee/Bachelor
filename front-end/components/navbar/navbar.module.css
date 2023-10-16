@@ -1,0 +1,49 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 10px 20px;
+  color: #fff;
+}
+
+
+.navbar_left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+}
+
+.navbar_right {
+  display: flex;
+  align-items: center;
+}
+
+.navbar_right a {
+  text-decoration: none;
+  color: black;
+  margin: 0 10px;
+}
+
+.user_profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.navbar-right a:hover {
+  text-decoration: underline;
+}
+
+.userIcon {
+  margin-left: 3rem;
+  margin-right: 3rem;
+}
+
+.navItem {
+  margin-left: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

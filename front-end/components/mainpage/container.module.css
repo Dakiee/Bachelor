@@ -1,0 +1,48 @@
+.container {
+  width: 100%;
+  margin-top: 3rem;
+}
+
+.headerText {
+  display: flex;
+  margin-top: 0.2rem;
+  justify-content: center;
+}
+
+.contentText {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.subText {
+  width: 80%;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.typoText{
+  margin-top: 0.5rem;
+  font-weight: bold;
+  color: black;
+}
+
+.middleText{
+  margin-top: 0.5rem;
+  font-weight: 400;
+  color: #3A3845;
+}
+
+.secondCard{
+  text-align: center;
+}
+
+.enterBtn{
+  margin-top: 0.5rem;
+  background-color: #EA454C;
+  color: white;
+  height: 3rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}

@@ -1,6 +1,7 @@
 .container {
   width: 100%;
   margin-top: 3rem;
+  padding-bottom: 2.3rem;
 }
 
 .headerText {
@@ -20,18 +21,20 @@
   width: 80%;
   text-align: center;
   margin-bottom: 2rem;
+  color: rgb(var(--background-color));
 }
 
 .typoText {
   margin-top: 0.5rem;
   font-weight: bold;
-  color: black;
+  color: rgb(var(--background-color));
+
 }
 
 .middleText {
   margin-top: 0.5rem;
   font-weight: 400;
-  color: #3a3845;
+  color: rgb(var(--background-color));
 }
 
 .secondCard {
@@ -55,13 +58,15 @@
 .card {
   background-color: #3a3845;
   padding: 0.4rem;
-  padding-left: 1rem;
-  margin-bottom: 1rem
+  width: 75%;
+  padding-left: 2rem;
+  margin-bottom: 1rem;
 }
 
 .cardHeader {
   color: white;
   font-weight: bold;
+  padding-left: 1rem;
 }
 
 .cardImg {
@@ -72,4 +77,8 @@
 
 .cardText {
   color: white;
+  padding-left: 1rem;
+}
+.featureText {
+  color: rgb(var(--background-color));
 }

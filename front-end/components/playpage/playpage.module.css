@@ -1,0 +1,41 @@
+.container {
+  margin: 3rem;
+}
+
+.cardBody {
+  padding: 3rem;
+}
+
+.playHeaderText {
+  color: rgb(var(--background-color));
+  font-weight: bold;
+}
+
+.playContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.playContentHeader {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  color: rgb(var(--background-color));
+}
+
+.playStatus {
+  /* display: flex; */
+}
+
+.progress_bar {
+  height: 24px;
+  background-color: #ccc;
+  border-radius: 30px;
+}
+
+.progress {
+  height: 100%;
+  border-radius: 30px;
+  background-color: rgb(var(--main-color));
+  transition: width 0.3s ease;
+}

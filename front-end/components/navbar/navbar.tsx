@@ -23,7 +23,7 @@ const Navbar = ({}) => (
           height={35}
           alt="Logo"
         ></Image>
-        <Link href="/">Play</Link>
+        <Link href="/play">Play</Link>
       </div>
       <div className={style.navItem}>
         <Image
@@ -32,7 +32,7 @@ const Navbar = ({}) => (
           height={35}
           alt="Logo"
         ></Image>
-        <Link href="/">Rank</Link>
+        <Link href="/rank">Rank</Link>
       </div>
       <div className={style.navItem}>
         <Image
@@ -41,7 +41,7 @@ const Navbar = ({}) => (
           height={35}
           alt="Logo"
         ></Image>
-        <Link href="/">About</Link>
+        <Link href="/about">About</Link>
       </div>
       <div className={style.userIcon}>
         <Image

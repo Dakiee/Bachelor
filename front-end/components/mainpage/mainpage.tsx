@@ -31,7 +31,7 @@ const TypingCard = ({ title, description, buttonText }) => (
   </Card>
 );
 
-const MyCardComponent = (props) => {
+const MyCardComponent = (props: any) => {
   const { imgSrc, title, description } = props;
 
   return (
@@ -105,14 +105,15 @@ const MainPage = () => (
           <Grid item xs={6}>
             <Image
               src="/assets/img/typingman.png"
-              width={500}
-              height={350}
+              width={550}
+              height={370}
               alt="Logo"
             ></Image>
           </Grid>
+
           <Grid item xs={6}>
             <Typography
-              className={`${roboto.className}`}
+              className={`${roboto.className} ${style.featureText}`}
               fontSize={48}
               color={"black"}
             >

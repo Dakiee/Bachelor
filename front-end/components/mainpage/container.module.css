@@ -22,27 +22,54 @@
   margin-bottom: 2rem;
 }
 
-.typoText{
+.typoText {
   margin-top: 0.5rem;
   font-weight: bold;
   color: black;
 }
 
-.middleText{
+.middleText {
   margin-top: 0.5rem;
   font-weight: 400;
-  color: #3A3845;
+  color: #3a3845;
 }
 
-.secondCard{
+.secondCard {
   text-align: center;
 }
 
-.enterBtn{
+.enterBtn {
   margin-top: 0.5rem;
-  background-color: #EA454C;
+  background-color: #ea454c;
   color: white;
   height: 3rem;
   padding: 1rem;
   margin-bottom: 1rem;
+}
+
+.secondContainer {
+  width: 100%;
+  background-color: white;
+}
+
+.card {
+  background-color: #3a3845;
+  padding: 0.4rem;
+  padding-left: 1rem;
+  margin-bottom: 1rem
+}
+
+.cardHeader {
+  color: white;
+  font-weight: bold;
+}
+
+.cardImg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardText {
+  color: white;
 }

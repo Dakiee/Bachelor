@@ -1,17 +1,40 @@
-import React from "react";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
+"use client";
+
+import React, { useState } from "react";
+import {
+  Grid,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Checkbox,
+} from "@mui/material";
 import style from "./login.module.css";
 import Image from "next/image";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { firebaseApp } from "../api/firebase";
+import { useRouter } from "next/navigation";
 import { Poppins } from "next/font/google";
+import { onAuthStateChanged } from "firebase/auth";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["500"] });
 
 const SignIn = () => {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const auth = getAuth(firebaseApp);
+
+  const handleSignIn = async () => {
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      router.push("/");
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   return (
     <Grid container style={{ height: "100vh", backgroundColor: "white" }}>
       <Grid item xs={6}>
@@ -44,7 +67,6 @@ const SignIn = () => {
             </Typography>
             <Grid
               container
-              xs={12}
               alignItems="center"
               justifyContent="center"
               style={{ height: "100%" }}
@@ -63,7 +85,9 @@ const SignIn = () => {
                   <TextField
                     label="Enter your email"
                     variant="outlined"
+                    name="email"
                     fullWidth
+                    onChange={(event) => setEmail(event.target.value)}
                     margin="normal"
                   />
                   <Typography
@@ -79,6 +103,8 @@ const SignIn = () => {
                     label="Enter your password"
                     type="password"
                     variant="outlined"
+                    name="password"
+                    onChange={(event) => setPassword(event.target.value)}
                     fullWidth
                     margin="normal"
                   />
@@ -107,8 +133,9 @@ const SignIn = () => {
                   </Grid>
                   <Button
                     variant="contained"
+                    onClick={handleSignIn}
                     fullWidth
-                    className={style.forgotBtn}
+                    className={`${poppins.className} ${style.forgotBtn}`}
                     sx={{ borderRadius: "15px" }}
                     style={{ marginTop: "20px" }}
                   >
@@ -118,7 +145,7 @@ const SignIn = () => {
                     variant="outlined"
                     fullWidth
                     sx={{ borderRadius: "15px" }}
-                    className={style.googleBtn}
+                    className={`${poppins.className} ${style.googleBtn}`}
                     style={{ marginTop: "10px" }}
                   >
                     <Image

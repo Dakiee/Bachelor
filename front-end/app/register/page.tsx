@@ -1,17 +1,52 @@
+"use client";
+
 import React from "react";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
+import { Grid, Paper, Typography, TextField, Button } from "@mui/material";
 import { Poppins } from "next/font/google";
 import style from "./register.module.css";
 import Image from "next/image";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { firebaseApp } from "../api/firebase";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["500"] });
 
 const SignUp = () => {
+  const [email, setEmail] = useState("");
+  const [passwordOne, setPasswordOne] = useState("");
+  const [passwordTwo, setPasswordTwo] = useState("");
+  const router = useRouter();
+  const [error, setError] = useState(null);
+
+  const handleSignUp = async (e: any) => {
+    e.preventDefault();
+
+    console.log("Form submitted");
+
+    if (passwordOne !== passwordTwo) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    console.log("Passwords match");
+
+    const auth = getAuth(firebaseApp);
+
+    try {
+      await createUserWithEmailAndPassword(auth, email, passwordOne);
+      console.log("User created");
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+      setError(error.message);
+    }
+  };
+
+  const blyat = () => {
+    console.log(123);
+  };
+
   return (
     <Grid container style={{ height: "100vh", backgroundColor: "white" }}>
       <Grid item xs={6}>
@@ -37,14 +72,13 @@ const SignUp = () => {
               align="center"
               mb={10}
               margin={"m-5"}
-              color={"grey"}
+              color={"gray"}
               className={poppins.className}
             >
               Welcome! Please enter your details.
             </Typography>
             <Grid
               container
-              xs={12}
               alignItems="center"
               justifyContent="center"
               style={{ height: "100%" }}
@@ -63,6 +97,8 @@ const SignUp = () => {
                   <TextField
                     label="Enter your email"
                     variant="outlined"
+                    name="email"
+                    onChange={(event) => setEmail(event.target.value)}
                     fullWidth
                     margin="normal"
                   />
@@ -78,6 +114,8 @@ const SignUp = () => {
                   <TextField
                     label="Enter your password"
                     type="password"
+                    onChange={(event) => setPasswordOne(event.target.value)}
+                    name="passwordOne"
                     variant="outlined"
                     fullWidth
                     margin="normal"
@@ -93,6 +131,8 @@ const SignUp = () => {
                   </Typography>
                   <TextField
                     label="Confirm your password"
+                    onChange={(event) => setPasswordTwo(event.target.value)}
+                    name="passwordTwo"
                     type="password"
                     variant="outlined"
                     fullWidth
@@ -100,8 +140,9 @@ const SignUp = () => {
                   />
                   <Button
                     variant="contained"
+                    onClick={handleSignUp}
                     fullWidth
-                    className={style.forgotBtn}
+                    className={`${poppins.className} ${style.forgotBtn}`}
                     sx={{ borderRadius: "15px" }}
                     style={{ marginTop: "20px" }}
                   >
@@ -110,8 +151,9 @@ const SignUp = () => {
                   <Button
                     variant="outlined"
                     fullWidth
+                    type="submit"
                     sx={{ borderRadius: "15px" }}
-                    className={style.googleBtn}
+                    className={`${poppins.className} ${style.googleBtn}`}
                     style={{ marginTop: "10px" }}
                   >
                     <Image

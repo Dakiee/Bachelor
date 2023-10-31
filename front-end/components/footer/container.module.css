@@ -1,0 +1,23 @@
+.footerDiv {
+  border-top: 1px solid #3a3845;
+  background-color: white;
+}
+
+.footerContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.footerText {
+  margin-top: 0.8rem;
+  color: #3a3845;
+}
+
+.footerImg {
+  display: flex;
+  justify-content: space-around;
+  width: 15%;
+  margin: 1rem;
+}

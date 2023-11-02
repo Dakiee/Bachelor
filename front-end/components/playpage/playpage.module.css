@@ -1,9 +1,12 @@
 .container {
+  height: 70vh;
   margin: 3rem;
 }
 
 .cardBody {
   padding: 3rem;
+  padding-left: 5rem;
+  padding-right: 5rem;
 }
 
 .playHeaderText {
@@ -18,19 +21,31 @@
 
 .playContentHeader {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   color: rgb(var(--background-color));
 }
 
+.playContentHeaderText {
+  margin-right: 2rem;
+}
+
+.playStatusName {
+  width: 10%;
+}
+
 .playStatus {
-  /* display: flex; */
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
 }
 
 .progress_bar {
-  height: 24px;
+  height: 20px;
   background-color: #ccc;
   border-radius: 30px;
+  width: 75%;
+  margin-right: 2rem;
 }
 
 .progress {
@@ -38,4 +53,37 @@
   border-radius: 30px;
   background-color: rgb(var(--main-color));
   transition: width 0.3s ease;
+}
+
+.playContentBodyText {
+  color: rgb(var(--background-color));
+  margin-right: 1.4rem;
+}
+
+.playContentEnd {
+  display: flex;
+  width: 15%;
+}
+
+.typingTextContainer {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  text-align: start;
+}
+
+.typingText {
+  font-weight: bold;
+}
+
+.typingField {
+  width: 100%;
+  border: 1px solid black;
+}
+
+.leaveBtn {
+  background-color: rgb(var(--main-color));
+  margin-top: 3rem;
+  color: white;
+  border-radius: 10px;
+  width: 15%;
 }

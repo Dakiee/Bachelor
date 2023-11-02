@@ -1,6 +1,9 @@
 .footerDiv {
   border-top: 1px solid #3a3845;
   background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .footerContent {

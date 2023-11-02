@@ -1,0 +1,12 @@
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+.filterBtn {
+  margin-right: 1rem;
+  background-color: rgb(var(--main-color));
+  margin-top: 3rem;
+  color: white;
+  border-radius: 10px;
+  width: 6%;
+}

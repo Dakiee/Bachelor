@@ -31,7 +31,7 @@ const SignIn = () => {
       await signInWithEmailAndPassword(auth, email, password);
       router.push("/");
     } catch (error) {
-      setError(error.message);
+      // setError(error.message);
     }
   };
 

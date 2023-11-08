@@ -66,7 +66,7 @@ const MainPage = () => (
             className={`${roboto.className} ${style.subText}`}
             fontSize={48}
           >
-            Elevate Your Speed and Accuracy to New Heights
+            Өөрийн хурд, нарийвчлалыг шинэ өндөрлөгт дээшлүүлээрэй
           </Typography>
         </div>
         <div className={style.contentText}>
@@ -74,10 +74,10 @@ const MainPage = () => (
             variant="body1"
             className={`${roboto.className} ${style.subText}`}
           >
-            Our website is your ultimate destination to master the art of typing
-            faster than ever before. Whether you are a student, professional, or
-            simply looking to improve your typing skills, we are here to help
-            you unleash your full potential.
+            Манай вэб сайт бол таны шивэх урлагийг урьд өмнөхөөсөө илүү хурдан
+            эзэмших цэг юм. Та оюутан ч бай, мэргэжлийн хүн ч бай, эсвэл зүгээр
+            л бичих чадвараа сайжруулахыг зорьж байгаа эсэхээс үл хамааран бид
+            танд өөрийн чадавхийг бүрэн дүүрэн нээхэд тань туслахад бэлэн байна.
           </Typography>
         </div>
       </Card>
@@ -85,16 +85,16 @@ const MainPage = () => (
       <Grid container spacing={5} style={{ marginTop: 1 }}>
         <Grid item xs={6}>
           <TypingCard
-            title="Race with your friends"
-            description="Increase your typing speed while racing against others!"
-            buttonText="Enter a Typing Race"
+            title="Найзуудтайгаа уралд"
+            description="Бусадтай уралдаж байхдаа бичих хурдаа нэмэгдүүлээрэй!"
+            buttonText="Уралдаанд оролцох"
           />
         </Grid>
         <Grid item xs={6}>
           <TypingCard
-            title="Typing Test"
-            description="Increase your typing speed while Practicing!"
-            buttonText="Practice"
+            title="Бичих тест"
+            description="Бичих чадвараа бие даан сайжруул!"
+            buttonText="Дасгал хийх"
           />
         </Grid>
       </Grid>
@@ -123,19 +123,19 @@ const MainPage = () => (
             <MyCardComponent
               imgSrc="/assets/img/typeracingicon.png"
               title="Type Racing"
-              description="Try and test your speed typing skills"
+              description="Хурдан бичих чадвараа туршиж үзээрэй"
             />
 
             <MyCardComponent
               imgSrc="/assets/img/leaderboardicon.png"
-              title="Type Racing"
-              description="Try and test your speed typing skills"
+              title="Leaderboard"
+              description="Оргилд гарч, шилдэг бичээч болоорой"
             />
 
             <MyCardComponent
               imgSrc="/assets/img/statisticicon.png"
-              title="Type Racing"
-              description="Try and test your speed typing skills"
+              title="User statistics"
+              description="Бичих ур чадварынхаа статистик мэдээллийг хуваалцаарай"
             />
           </Grid>
         </Grid>

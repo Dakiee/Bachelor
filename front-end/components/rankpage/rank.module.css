@@ -1,12 +1,60 @@
+.cardBody{
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  border-radius: 20px;
+}
+
 .buttons {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
 }
+
 .filterBtn {
   margin-right: 1rem;
   background-color: rgb(var(--main-color));
-  margin-top: 3rem;
   color: white;
   border-radius: 10px;
-  width: 6%;
+  font-weight: bold;
+  width: 10%;
+}
+
+.tableContent {
+  margin-top: 1rem;
+}
+
+.tableCellRank{
+  border-radius: 50%; 
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.tableHeaderText {
+  background-color: #494061;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tableCellText{
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tableCellDate{
+  font-weight: bold;
+  color: gray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

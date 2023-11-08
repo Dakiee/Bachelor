@@ -53,15 +53,21 @@ const PlayPage = () => {
 
   return (
     <div className={`${style.container} ${rubik.className}`}>
-      <Container maxWidth="xl">
+      <Container>
         <Card className={style.cardBody}>
-          <Typography
-            variant="body1"
-            fontSize={24}
-            className={`${rubik.className} ${style.playHeaderText}`}
-          >
-            The race is on! Type the text below:
-          </Typography>
+          <div className={style.topText}>
+            <Typography
+              variant="body1"
+              fontSize={24}
+              className={`${rubik.className} ${style.playHeaderText}`}
+            >
+              Уралдаан үргэлжилж байна! Доорх текстийг бичнэ үү:
+            </Typography>
+            <Typography variant="body1" color="red" className={`${rubik.className} ${style.linkText}`}>
+              invite people
+            </Typography>
+          </div>
+
           <div className={style.playContent}>
             <div className={style.playContentHeader}>
               <Typography
@@ -69,14 +75,14 @@ const PlayPage = () => {
                 fontSize={18}
                 className={style.playContentHeaderText}
               >
-                Speed
+                Хурд
               </Typography>
               <Typography
                 variant="body1"
                 fontSize={18}
                 className={style.playContentHeaderText}
               >
-                Accuracy
+                Нарийвчлал
               </Typography>
             </div>
 
@@ -102,10 +108,11 @@ const PlayPage = () => {
                 className={style.typingText}
                 fontSize={20}
               >
-                The best quotes contain messages that provide wisdom we can
-                carry with us every day and inspire us to be our best selves.
-                Let these words fill you with hope and give you the motivation
-                to keep going, even when things are hard.
+                Эрт урьд цагт энэ дэлхийд долоон нар гараад, ган гачиг болоод,
+                газрын хөрс улайдаад, ус мөрөн ширгээд, ургамал мод хатаад,
+                амьтан хүн халууцаад, адуу мал харангадаад, байх суухын аргагүй
+                болж гэнэ. Тэгтэл тэр нутагт Эрхий мэргэн гэдэг харснаа
+                харвадаг, харваснаа онодог хавтай мэргэн харваач байж гэнээ.
               </Typography>
             </div>
 
@@ -121,7 +128,7 @@ const PlayPage = () => {
               variant="text"
               className={`${rubik.className} ${style.leaveBtn}`}
             >
-              leave race
+              уралдааныг орхи
             </Button>
           </div>
         </Card>

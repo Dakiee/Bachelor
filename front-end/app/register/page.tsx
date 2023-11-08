@@ -43,10 +43,6 @@ const SignUp = () => {
     }
   };
 
-  const blyat = () => {
-    console.log(123);
-  };
-
   return (
     <Grid container style={{ height: "100vh", backgroundColor: "white" }}>
       <Grid item xs={6}>

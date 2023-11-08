@@ -4,18 +4,53 @@ import Card from "@mui/material/Card";
 import style from "./rank.module.css";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Rubik } from "next/font/google";
+import { Grid } from "@mui/material";
+
+import { Roboto_Slab, Rubik } from "next/font/google";
+
+const roboto = Roboto_Slab({ subsets: ["latin"], weight: ["700"] });
+const roboto1 = Roboto_Slab({ subsets: ["latin"], weight: ["400"] });
 const rubik = Rubik({ subsets: ["latin"] });
 
 const RankContent = () => {
+  const data = [
+    { name: "Dakie", date: "2023-11-07", wpm: 120 },
+    { name: "Bald", date: "2023-11-07", wpm: 80 },
+    { name: "Blgn", date: "2023-11-07", wpm: 70 },
+    { name: "Dalai", date: "2023-11-07", wpm: 120 },
+    { name: "Guzee", date: "2023-11-07", wpm: 80 },
+    { name: "Tsedo", date: "2023-11-07", wpm: 70 },
+  ];
+
+  const getRandomColor = () => {
+    const red = Math.floor(Math.random() * 256);
+    const green = Math.floor(Math.random() * 256);
+    const blue = Math.floor(Math.random() * 256);
+    return `rgb(${red}, ${green}, ${blue})`;
+  };
+
   return (
-    <div>
-      <Container maxWidth="xl">
+    <>
+      <Container>
         <Card className={style.cardBody}>
-          <Typography variant="body1">LeaderBoard</Typography>
-          <Typography variant="body1">
-            Compete against other users and aim for the top spot on the
-            leaderboard
+          <Typography
+            variant="h3"
+            fontWeight={"bold"}
+            className={roboto.className}
+            pt={4}
+            pl={3}
+            pb={1}
+          >
+            Тэргүүлэгчдийн самбар
+          </Typography>
+          <Typography
+            variant="body1"
+            className={roboto1.className}
+            pl={3}
+            color={"gray"}
+          >
+            Бусад хэрэглэгчидтэй өрсөлдөж, тэргүүлэгчдийн самбарын тэргүүн
+            байрыг зорь.
           </Typography>
           <div className={style.buttons}>
             <Button
@@ -38,11 +73,100 @@ const RankContent = () => {
             </Button>
           </div>
           <div>
-            
+            <Grid container className={style.tableContent}>
+              <Grid item xs={2} textAlign={"center"}>
+                <Typography
+                  variant="body1"
+                  className={style.tableHeaderText}
+                  py={1}
+                >
+                  Rank
+                </Typography>
+              </Grid>
+              <Grid item xs={3} textAlign={"center"}>
+                <Typography
+                  variant="body1"
+                  className={style.tableHeaderText}
+                  py={1}
+                >
+                  Name
+                </Typography>
+              </Grid>
+              <Grid item xs={4} textAlign={"center"}>
+                <Typography
+                  variant="body1"
+                  className={style.tableHeaderText}
+                  py={1}
+                >
+                  Taken
+                </Typography>
+              </Grid>
+              <Grid item xs={3} textAlign={"center"}>
+                <Typography
+                  variant="body1"
+                  className={style.tableHeaderText}
+                  py={1}
+                >
+                  Highest WPM
+                </Typography>
+              </Grid>
+              {data.map((entry, index) => {
+                return (
+                  <>
+                    <Grid
+                      item
+                      xs={2}
+                      py={1}
+                      display={"flex"}
+                      justifyContent={"center"}
+                      borderBottom={"1px solid black"}
+                    >
+                      <Typography
+                        variant="body1"
+                        className={`${style.tableCellRank}`}
+                        style={{ background: getRandomColor() }}
+                      >
+                        {index + 1}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={3}
+                      textAlign={"center"}
+                      py={1}
+                      className={style.tableCellText}
+                      borderBottom={"1px solid black"}
+                    >
+                      {entry.name}
+                    </Grid>
+                    <Grid
+                      item
+                      xs={4}
+                      textAlign={"center"}
+                      py={1}
+                      className={style.tableCellDate}
+                      borderBottom={"1px solid black"}
+                    >
+                      {entry.date}
+                    </Grid>
+                    <Grid
+                      item
+                      xs={3}
+                      textAlign={"center"}
+                      py={1}
+                      className={style.tableCellText}
+                      borderBottom={"1px solid black"}
+                    >
+                      {entry.wpm}
+                    </Grid>
+                  </>
+                );
+              })}
+            </Grid>
           </div>
         </Card>
       </Container>
-    </div>
+    </>
   );
 };
 

@@ -1,6 +1,15 @@
 .container {
-  height: 70vh;
   margin: 3rem;
+}
+
+.topText{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.linkText{
+  font-weight: bold;
 }
 
 .cardBody {
@@ -44,7 +53,7 @@
   height: 20px;
   background-color: #ccc;
   border-radius: 30px;
-  width: 75%;
+  width: 65%;
   margin-right: 2rem;
 }
 
@@ -85,5 +94,5 @@
   margin-top: 3rem;
   color: white;
   border-radius: 10px;
-  width: 15%;
+  width: 20%;
 }

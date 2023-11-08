@@ -1,0 +1,21 @@
+.mainText{
+    font-size: 20px;
+}
+
+.statText{
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.footerText{
+    font-size: 40px;
+    color: rgb(var(--background-color));
+}
+
+.footerContent{
+    margin-left: 8rem;
+    margin-right: 8rem;
+    margin-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+}

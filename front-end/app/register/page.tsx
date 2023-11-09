@@ -25,7 +25,7 @@ const SignUp = () => {
     console.log("Form submitted");
 
     if (passwordOne !== passwordTwo) {
-      setError("Passwords do not match");
+      // setError("Passwords do not match");
       return;
     }
 
@@ -39,7 +39,7 @@ const SignUp = () => {
       router.push("/");
     } catch (error) {
       console.error(error);
-      setError(error.message);
+      // setError(error.message);
     }
   };
 

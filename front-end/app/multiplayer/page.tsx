@@ -1,13 +1,14 @@
 import React from "react";
 import Navbar from "@/components/navbar/navbar";
 import Footer from "@/components/footer/footer";
-import PlayPage from "@/components/playpage/playpage";
+import MultiPlayerPage from "@/components/multiplayer/multiplayerpage";
+
 
 const Play = () => {
   return (
     <div>
       <Navbar></Navbar>
-      <PlayPage></PlayPage>
+      <MultiPlayerPage></MultiPlayerPage>
       <Footer></Footer>
     </div>
   );

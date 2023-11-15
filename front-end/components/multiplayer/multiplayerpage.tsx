@@ -12,7 +12,7 @@ import style from "./playpage.module.css";
 import { Rubik } from "next/font/google";
 const rubik = Rubik({ subsets: ["latin"] });
 
-const PlayPage = () => {
+const MultiPlayerPage = () => {
   const PlayContent = (props: any) => {
     const { name, progress, wpm, completion, style } = props;
 
@@ -137,4 +137,4 @@ const PlayPage = () => {
   );
 };
 
-export default PlayPage;
+export default MultiPlayerPage;

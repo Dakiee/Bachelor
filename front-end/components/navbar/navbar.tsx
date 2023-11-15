@@ -23,7 +23,7 @@ const Navbar = ({}) => (
           height={35}
           alt="Logo"
         ></Image>
-        <Link href="/play">Тоглох</Link>
+        <Link href="/singleplayer">Тоглох</Link>
       </div>
       <div className={style.navItem}>
         <Image

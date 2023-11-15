@@ -10,13 +10,9 @@ export default function Home() {
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // User is signed in
       console.log("User is authenticated:", user);
-      // You can perform actions for authenticated users here
     } else {
-      // No user is signed in
       console.log("No user authenticated");
-      // You can perform actions for unauthenticated users here
     }
   });
 

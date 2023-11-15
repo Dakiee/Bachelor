@@ -2,7 +2,7 @@ import { Card, Container, Typography, Grid, Button, Box } from "@mui/material";
 import React from "react";
 import Image from "next/image";
 import { Speed, StarBorder, BarChart } from "@mui/icons-material";
-
+import Link from "next/link";
 import style from "./container.module.css";
 import { Roboto_Slab, Rubik } from "next/font/google";
 
@@ -11,7 +11,7 @@ const rubik = Rubik({ subsets: ["latin"] });
 
 const MainPage = () => {
   const TypingCard = (props: any) => {
-    const { title, description, buttonText } = props;
+    const { title, description, buttonText, link } = props;
 
     return (
       <Card className={style.secondCard}>
@@ -33,7 +33,7 @@ const MainPage = () => {
           variant="text"
           className={`${rubik.className} ${style.enterBtn}`}
         >
-          {buttonText}
+          <Link href={link}>{buttonText}</Link>
         </Button>
       </Card>
     );
@@ -96,6 +96,7 @@ const MainPage = () => {
               title="Найзуудтайгаа уралд"
               description="Бусадтай уралдаж байхдаа бичих хурдаа нэмэгдүүлээрэй!"
               buttonText="Уралдаанд оролцох"
+              link="multiplayer"
             />
           </Grid>
           <Grid item xs={6}>
@@ -103,6 +104,7 @@ const MainPage = () => {
               title="Бичих тест"
               description="Бичих чадвараа бие даан сайжруул!"
               buttonText="Дасгал хийх"
+              link="singleplayer"
             />
           </Grid>
         </Grid>

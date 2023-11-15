@@ -1,0 +1,98 @@
+.container {
+  margin: 3rem;
+}
+
+.topText{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.linkText{
+  font-weight: bold;
+}
+
+.cardBody {
+  padding: 3rem;
+  padding-left: 5rem;
+  padding-right: 5rem;
+}
+
+.playHeaderText {
+  color: rgb(var(--background-color));
+  font-weight: bold;
+}
+
+.playContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.playContentHeader {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  color: rgb(var(--background-color));
+}
+
+.playContentHeaderText {
+  margin-right: 2rem;
+}
+
+.playStatusName {
+  width: 10%;
+}
+
+.playStatus {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.progress_bar {
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 30px;
+  width: 65%;
+  margin-right: 2rem;
+}
+
+.progress {
+  height: 100%;
+  border-radius: 30px;
+  background-color: rgb(var(--main-color));
+  transition: width 0.3s ease;
+}
+
+.playContentBodyText {
+  color: rgb(var(--background-color));
+  margin-right: 1.4rem;
+}
+
+.playContentEnd {
+  display: flex;
+  width: 15%;
+}
+
+.typingTextContainer {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  text-align: start;
+}
+
+.typingText {
+  font-weight: bold;
+}
+
+.typingField {
+  width: 100%;
+  border: 1px solid black;
+}
+
+.leaveBtn {
+  background-color: rgb(var(--main-color));
+  margin-top: 3rem;
+  color: white;
+  border-radius: 10px;
+  width: 20%;
+}

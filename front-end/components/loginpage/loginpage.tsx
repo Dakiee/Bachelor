@@ -11,8 +11,7 @@ import {
 } from "@mui/material";
 import style from "./login.module.css";
 import Image from "next/image";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { firebaseApp } from "../../app/api/firebase";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Poppins } from "next/font/google";
 
@@ -22,17 +21,6 @@ const LogInPage = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const auth = getAuth(firebaseApp);
-
-  const handleSignIn = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      router.push("/");
-    } catch (error) {
-      console.log("error");
-      // setError(error.message);
-    }
-  };
 
   return (
     <Grid container style={{ height: "100vh", backgroundColor: "white" }}>
@@ -71,92 +59,98 @@ const LogInPage = () => {
               style={{ height: "100%" }}
             >
               <Grid item xs={7}>
-                <form>
-                  <Typography
-                    variant="h1"
-                    color="black"
-                    className={poppins.className}
-                    fontWeight={"bold"}
-                    fontSize={"16px"}
-                  >
-                    Email
-                  </Typography>
-                  <TextField
-                    label="Enter your email"
-                    variant="outlined"
-                    name="email"
-                    fullWidth
-                    onChange={(event) => setEmail(event.target.value)}
-                    margin="normal"
-                  />
-                  <Typography
-                    variant="h1"
-                    color="black"
-                    className={poppins.className}
-                    fontWeight={"bold"}
-                    fontSize={"16px"}
-                  >
-                    Password
-                  </Typography>
-                  <TextField
-                    label="Enter your password"
-                    type="password"
-                    variant="outlined"
-                    name="password"
-                    onChange={(event) => setPassword(event.target.value)}
-                    fullWidth
-                    margin="normal"
-                  />
-                  <Grid container alignItems="center">
-                    <Grid item xs={1}>
-                      <Checkbox color="primary" />
-                    </Grid>
-                    <Grid item xs={7}>
-                      <Typography
-                        variant="body1"
-                        color="black"
-                        className={poppins.className}
-                      >
-                        Remember Me
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={4} alignItems="right">
-                      <Button
-                        color="primary"
-                        size="small"
-                        className={poppins.className}
-                      >
-                        Forgot Password
-                      </Button>
-                    </Grid>
+                <Typography
+                  variant="h1"
+                  color="black"
+                  className={poppins.className}
+                  fontWeight={"bold"}
+                  fontSize={"16px"}
+                >
+                  Email
+                </Typography>
+                <TextField
+                  label="Enter your email"
+                  variant="outlined"
+                  name="email"
+                  fullWidth
+                  onChange={(event) => setEmail(event.target.value)}
+                  margin="normal"
+                />
+                <Typography
+                  variant="h1"
+                  color="black"
+                  className={poppins.className}
+                  fontWeight={"bold"}
+                  fontSize={"16px"}
+                >
+                  Password
+                </Typography>
+                <TextField
+                  label="Enter your password"
+                  type="password"
+                  variant="outlined"
+                  name="password"
+                  onChange={(event) => setPassword(event.target.value)}
+                  fullWidth
+                  margin="normal"
+                />
+                <Grid container alignItems="center">
+                  <Grid item xs={1}>
+                    <Checkbox color="primary" />
                   </Grid>
-                  <Button
-                    variant="contained"
-                    onClick={handleSignIn}
-                    fullWidth
-                    className={`${poppins.className} ${style.forgotBtn}`}
-                    sx={{ borderRadius: "15px" }}
-                    style={{ marginTop: "20px" }}
-                  >
-                    Sign In
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    fullWidth
-                    sx={{ borderRadius: "15px" }}
-                    className={`${poppins.className} ${style.googleBtn}`}
-                    style={{ marginTop: "10px" }}
-                  >
-                    <Image
-                      src="/assets/img/google.png"
-                      width={20}
-                      height={20}
-                      alt="Picture of the google btn"
-                      className={style.googleImg}
-                    ></Image>
-                    Sign In with Google
-                  </Button>
-                </form>
+                  <Grid item xs={7}>
+                    <Typography
+                      variant="body1"
+                      color="black"
+                      className={poppins.className}
+                    >
+                      Remember Me
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={4} alignItems="right">
+                    <Button
+                      color="primary"
+                      size="small"
+                      className={poppins.className}
+                    >
+                      Forgot Password
+                    </Button>
+                  </Grid>
+                </Grid>
+                <Button
+                  variant="contained"
+                  onClick={() =>
+                    signIn("credentials", {
+                      email,
+                      password,
+                      redirect: true,
+                      callbackUrl: "/",
+                    })
+                  }
+                  disabled={!email || !password}
+                  fullWidth
+                  className={`${poppins.className} ${style.forgotBtn}`}
+                  sx={{ borderRadius: "15px" }}
+                  style={{ marginTop: "20px" }}
+                >
+                  Sign In
+                </Button>
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  sx={{ borderRadius: "15px" }}
+                  className={`${poppins.className} ${style.googleBtn}`}
+                  style={{ marginTop: "10px" }}
+                >
+                  <Image
+                    src="/assets/img/google.png"
+                    width={20}
+                    height={20}
+                    alt="Picture of the google btn"
+                    className={style.googleImg}
+                  ></Image>
+                  Sign In with Google
+                </Button>
               </Grid>
             </Grid>
           </Grid>

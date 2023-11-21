@@ -37,15 +37,61 @@
   text-decoration: underline;
 }
 
-.userIcon {
-  margin-left: 3rem;
-  margin-right: 3rem;
-}
-
 .navItem {
   margin-left: 2rem;
   font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+
+.userIcon {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.userIcon img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.dropdown_content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.dropdown_button {
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  width: 150px;
+  text-align: left;
+}
+
+.dropdown_button:hover {
+  background-color: #45a049;
+}
+
+.dropdown_content a {
+  color: #333;
+  padding: 10px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown_content a:hover {
+  background-color: #f4f4f4;
+}
+
+.userIcon:hover .dropdown_content {
+  display: block;
 }

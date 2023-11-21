@@ -1,59 +1,96 @@
-import Link from "next/link";
-import style from "./navbar.module.css"; // Import the CSS file
-import Image from "next/image";
+"use client";
 
-const Navbar = ({}) => (
-  <nav className={style.navbar}>
-    <div className={style.navbar_left}>
-      <Link href="/" className={style.navbar_left}>
-        <Image
-          src="/assets/img/ducklogo.png"
-          width={50}
-          height={50}
-          alt="Logo"
-        ></Image>
-        Race
-      </Link>
-    </div>
-    <div className={style.navbar_right}>
-      <div className={style.navItem}>
-        <Image
-          src="/assets/img/play.png"
-          width={35}
-          height={35}
-          alt="Logo"
-        ></Image>
-        <Link href="/singleplayer">Тоглох</Link>
+import { useState } from "react";
+import Link from "next/link";
+import style from "./navbar.module.css";
+import Image from "next/image";
+import { Avatar, Button, Menu, MenuItem } from "@mui/material";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
+const Navbar = () => {
+  const router = useRouter();
+
+  const goToProfile = () => {
+    router.push("/statistics");
+  };
+
+  const [anchorEl1, setAnchorEl1] = useState(null);
+
+  const handleClick1 = (event: any) => {
+    setAnchorEl1(event.currentTarget);
+  };
+
+  const handleClose1 = () => {
+    setAnchorEl1(null);
+  };
+
+  return (
+    <nav className={style.navbar}>
+      <div className={style.navbar_left}>
+        <Link href="/" className={style.navbar_left}>
+          <Image
+            src="/assets/img/ducklogo.png"
+            width={50}
+            height={50}
+            alt="Logo"
+          ></Image>
+          Race
+        </Link>
       </div>
-      <div className={style.navItem}>
-        <Image
-          src="/assets/img/rank.png"
-          width={35}
-          height={35}
-          alt="Logo"
-        ></Image>
-        <Link href="/rank">Ранк</Link>
+      <div className={style.navbar_right}>
+        <div className={style.navItem}>
+          <Image
+            src="/assets/img/play.png"
+            width={35}
+            height={35}
+            alt="Logo"
+          ></Image>
+          <Link href="/singleplayer">Тоглох</Link>
+        </div>
+        <div className={style.navItem}>
+          <Image
+            src="/assets/img/rank.png"
+            width={35}
+            height={35}
+            alt="Logo"
+          ></Image>
+          <Link href="/rank">Ранк</Link>
+        </div>
+        <div className={style.navItem}>
+          <Image
+            src="/assets/img/about.png"
+            width={35}
+            height={35}
+            alt="Logo"
+          ></Image>
+          <Link href="/about">Тухай</Link>
+        </div>
+
+        <div>
+          <Button
+            variant="contained"
+            onClick={handleClick1}
+            style={{
+              marginRight: 30,
+              marginLeft: 30,
+              backgroundColor: "transparent",
+            }}
+          >
+            <Avatar alt="User Avatar" src="/path/to/avatar.jpg" />
+          </Button>
+          <Menu
+            anchorEl={anchorEl1}
+            open={Boolean(anchorEl1)}
+            onClose={handleClose1}
+          >
+            <MenuItem onClick={goToProfile}>Profile</MenuItem>
+            <MenuItem onClick={() => signOut()}>SignOut</MenuItem>
+          </Menu>
+        </div>
       </div>
-      <div className={style.navItem}>
-        <Image
-          src="/assets/img/about.png"
-          width={35}
-          height={35}
-          alt="Logo"
-        ></Image>
-        <Link href="/about">Тухай</Link>
-      </div>
-      <div className={style.userIcon}>
-        <Image
-          src="/assets/img/keyboard.png"
-          alt="Logo"
-          width={25}
-          height={25}
-          className={style.user_profile}
-        ></Image>
-      </div>
-    </div>
-  </nav>
-);
+    </nav>
+  );
+};
 
 export default Navbar;

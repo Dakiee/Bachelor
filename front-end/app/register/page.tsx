@@ -1,7 +1,7 @@
 import React from "react";
 import RegisterPage from "@/components/registerpage/registerpage";
 
-const Play = () => {
+const Register = () => {
   return (
     <div>
       <RegisterPage></RegisterPage>
@@ -9,4 +9,4 @@ const Play = () => {
   );
 };
 
-export default Play;
+export default Register;

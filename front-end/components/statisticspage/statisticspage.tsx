@@ -1,11 +1,24 @@
+"use client";
+
 import { Box, Container, Card, Typography, Grid } from "@mui/material";
 import Image from "next/image";
 import style from "./statistics.module.css";
-
+import { useSession } from "next-auth/react";
 import { Rubik } from "next/font/google";
+import { redirect } from "next/navigation";
+
 const rubik = Rubik({ subsets: ["latin"] });
 
+
+
 const StatisticsPage = () => {
+  const session = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("/login");
+    },
+  });
+  
   const StatCard = (props: any) => {
     const { value, fieldName, backgroundColor } = props;
 
@@ -55,11 +68,19 @@ const StatisticsPage = () => {
             alt="Picture of the google btn"
             className={style.googleImg}
           ></Image> */}
-          <Typography variant="body1" color="black" className={`${rubik.className} ${style.firstCardHeaderText}`}>
+          <Typography
+            variant="body1"
+            color="black"
+            className={`${rubik.className} ${style.firstCardHeaderText}`}
+          >
             Dakie
           </Typography>
-          <Typography variant="body1" color="black" className={`${rubik.className} ${style.firstCardMailText}`}>
-            ldavaanyam@gmail.com
+          <Typography
+            variant="body1"
+            color="black"
+            className={`${rubik.className} ${style.firstCardMailText}`}
+          >
+            <div className="text-white">{session?.data?.user?.email}</div>
           </Typography>
         </Card>
         <Card className={style.secondCard}>

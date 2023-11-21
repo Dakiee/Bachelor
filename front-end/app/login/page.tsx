@@ -1,7 +1,7 @@
 import React from "react";
 import LogInPage from "@/components/loginpage/loginpage";
 
-const Play = () => {
+const Login = () => {
   return (
     <div>
       <LogInPage></LogInPage>
@@ -9,4 +9,4 @@ const Play = () => {
   );
 };
 
-export default Play;
+export default Login;

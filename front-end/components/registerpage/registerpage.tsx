@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { firebaseApp } from "../../app/api/firebase";
+import { firebaseApp, auth } from "../../app/api/firebase";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["500"] });
 
@@ -17,21 +17,13 @@ const RegisterPage = () => {
   const [passwordOne, setPasswordOne] = useState("");
   const [passwordTwo, setPasswordTwo] = useState("");
   const router = useRouter();
-  const [error, setError] = useState(null);
 
   const handleSignUp = async (e: any) => {
     e.preventDefault();
-
-    console.log("Form submitted");
-
     if (passwordOne !== passwordTwo) {
-      // setError("Passwords do not match");
+      console.log("wrong password blyat");
       return;
     }
-
-    console.log("Passwords match");
-
-    const auth = getAuth(firebaseApp);
 
     try {
       await createUserWithEmailAndPassword(auth, email, passwordOne);
@@ -39,7 +31,6 @@ const RegisterPage = () => {
       router.push("/");
     } catch (error) {
       console.error(error);
-      // setError(error.message);
     }
   };
 

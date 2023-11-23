@@ -25,7 +25,7 @@ import ResultModal from "./resultmodal";
 const rubik = Rubik({ subsets: ["latin"] });
 
 const SinglePlayerPage = () => {
-  const TIME_LIMIT = 10;
+  const TIME_LIMIT = 90;
   const MAX_LENGTH = 32;
 
   const [input, setInput] = useState("");
@@ -156,6 +156,7 @@ const SinglePlayerPage = () => {
   }, [status]);
 
   const resetGame = () => {
+    setCharStatus(new Array(words.length).fill(-1));
     setCharIndex(0);
     setWordIndex(0);
     setInput("");

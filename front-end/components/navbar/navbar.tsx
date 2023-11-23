@@ -7,9 +7,15 @@ import Image from "next/image";
 import { Avatar, Button, Menu, MenuItem } from "@mui/material";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 const Navbar = () => {
   const router = useRouter();
+  const session = useSession({
+    required: false,
+    onUnauthenticated() {},
+  });
 
   const goToProfile = () => {
     router.push("/statistics");
@@ -79,13 +85,18 @@ const Navbar = () => {
           >
             <Avatar alt="User Avatar" src="/path/to/avatar.jpg" />
           </Button>
+
           <Menu
             anchorEl={anchorEl1}
             open={Boolean(anchorEl1)}
             onClose={handleClose1}
           >
-            <MenuItem onClick={goToProfile}>Profile</MenuItem>
-            <MenuItem onClick={() => signOut()}>SignOut</MenuItem>
+            {session ? (
+              <MenuItem onClick={goToProfile}>Профайл</MenuItem>
+            ) : (
+              <MenuItem onClick={() => router.push("/login")}>Нэвтрэх</MenuItem>
+            )}
+            {session && <MenuItem onClick={() => signOut()}>Гарах</MenuItem>}
           </Menu>
         </div>
       </div>

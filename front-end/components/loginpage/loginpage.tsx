@@ -50,7 +50,7 @@ const LogInPage = () => {
               color={"gray"}
               className={poppins.className}
             >
-              Welcome back! Please enter your details.
+              Буцаад тавтай морил! Мэдээллээ оруулна уу.
             </Typography>
             <Grid
               container
@@ -66,10 +66,10 @@ const LogInPage = () => {
                   fontWeight={"bold"}
                   fontSize={"16px"}
                 >
-                  Email
+                  Имэйл
                 </Typography>
                 <TextField
-                  label="Enter your email"
+                  label="Имэйлээ оруулна уу"
                   variant="outlined"
                   name="email"
                   fullWidth
@@ -83,10 +83,10 @@ const LogInPage = () => {
                   fontWeight={"bold"}
                   fontSize={"16px"}
                 >
-                  Password
+                  Нууц үг
                 </Typography>
                 <TextField
-                  label="Enter your password"
+                  label="Нууц үгээ оруулна уу"
                   type="password"
                   variant="outlined"
                   name="password"
@@ -96,7 +96,7 @@ const LogInPage = () => {
                 />
                 <Grid container alignItems="center">
                   <Grid item xs={1}>
-                    <Checkbox color="primary" />
+                    <Checkbox color="primary" checked={true}/>
                   </Grid>
                   <Grid item xs={7}>
                     <Typography
@@ -104,7 +104,7 @@ const LogInPage = () => {
                       color="black"
                       className={poppins.className}
                     >
-                      Remember Me
+                      Намайг сана
                     </Typography>
                   </Grid>
                   <Grid item xs={4} alignItems="right">
@@ -113,7 +113,7 @@ const LogInPage = () => {
                       size="small"
                       className={poppins.className}
                     >
-                      Forgot Password
+                      Нууц үгээ мартсан
                     </Button>
                   </Grid>
                 </Grid>
@@ -133,7 +133,7 @@ const LogInPage = () => {
                   sx={{ borderRadius: "15px" }}
                   style={{ marginTop: "20px" }}
                 >
-                  Sign In
+                  Нэвтрэх
                 </Button>
                 <Button
                   variant="outlined"

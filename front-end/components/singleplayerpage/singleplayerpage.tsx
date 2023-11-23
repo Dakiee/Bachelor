@@ -20,6 +20,7 @@ import { db } from "@/app/api/firebase";
 import { ref, set } from "firebase/database";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import ResultModal from "./resultmodal";
 
 const rubik = Rubik({ subsets: ["latin"] });
 
@@ -44,6 +45,9 @@ const SinglePlayerPage = () => {
   const [words, setWords] = useState("");
   const [correct, setCorrect] = useState(0);
   const [wrong, setWrong] = useState(0);
+
+  const [showModal, setShowModal] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   const session = useSession({
     required: true,
@@ -122,8 +126,12 @@ const SinglePlayerPage = () => {
       }, 1000);
     } else if (status === "completed") {
       clearInterval(timeLimit);
+      setFailed(false);
+      setShowModal(true);
     } else if (status === "finished") {
       clearInterval(timeLimit);
+      setFailed(true);
+      setShowModal(true);
 
       set(ref(db, "race/" + raceId), {
         creator_id: session?.data?.user?.email,
@@ -229,6 +237,7 @@ const SinglePlayerPage = () => {
     setCharIndex(charIndex + last_space); // switch index
     setWordIndex(wordIndex + word_correct);
     setCharStatus(currStatus);
+
     if (currString.length > input.length) {
       isCorrect ? setCorrect(correct + 1) : setWrong(wrong + 1);
     }
@@ -303,8 +312,34 @@ const SinglePlayerPage = () => {
     );
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleRetry = () => {
+    setStatus("idle");
+    setShowModal(false);
+    start();
+  };
+
+  const handleLeave = () => {
+    setStatus("idle");
+    setShowModal(false);
+    setFetchData(false);
+  };
+
   return (
     <>
+      <ResultModal
+        open={showModal}
+        onClose={handleCloseModal}
+        handleRetry={handleRetry}
+        handleLeave={handleLeave}
+        wpm={calculateWPM(time, wordIndex).currentWPM}
+        time={time}
+        accuracy={calculateAccuracy(correct, wrong)}
+        failed={failed}
+      />
       {status === "idle" ? (
         <div className={`${style.container} ${rubik.className}`}>
           <Container>

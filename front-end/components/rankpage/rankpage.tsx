@@ -18,7 +18,7 @@ const RankContent = () => {
     { name: "Bald", date: "2023-11-07", wpm: 80 },
     { name: "Blgn", date: "2023-11-07", wpm: 70 },
     { name: "Dalai", date: "2023-11-07", wpm: 120 },
-    { name: "Guzee", date: "2023-11-07", wpm: 80 },
+    { name: "Boldoo", date: "2023-11-07", wpm: 80 },
     { name: "Tsedo", date: "2023-11-07", wpm: 70 },
   ];
 
@@ -57,19 +57,19 @@ const RankContent = () => {
               variant="text"
               className={`${rubik.className} ${style.filterBtn}`}
             >
-              week
+              7 хоног
             </Button>
             <Button
               variant="text"
               className={`${rubik.className} ${style.filterBtn}`}
             >
-              month
+              сар
             </Button>
             <Button
               variant="text"
               className={`${rubik.className} ${style.filterBtn}`}
             >
-              year
+              жил
             </Button>
           </div>
           <div>
@@ -80,7 +80,7 @@ const RankContent = () => {
                   className={style.tableHeaderText}
                   py={1}
                 >
-                  Rank
+                  Ранк
                 </Typography>
               </Grid>
               <Grid item xs={3} textAlign={"center"}>
@@ -89,7 +89,7 @@ const RankContent = () => {
                   className={style.tableHeaderText}
                   py={1}
                 >
-                  Name
+                  Нэр
                 </Typography>
               </Grid>
               <Grid item xs={4} textAlign={"center"}>
@@ -98,7 +98,7 @@ const RankContent = () => {
                   className={style.tableHeaderText}
                   py={1}
                 >
-                  Taken
+                  Хугацаа
                 </Typography>
               </Grid>
               <Grid item xs={3} textAlign={"center"}>
@@ -107,7 +107,7 @@ const RankContent = () => {
                   className={style.tableHeaderText}
                   py={1}
                 >
-                  Highest WPM
+                  Хамгийн их WPM
                 </Typography>
               </Grid>
               {data.map((entry, index) => {

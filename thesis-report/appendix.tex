@@ -1,457 +1,325 @@
-% \appendix
-% \renewcommand\bibname{Хавсралт}
-% \addcontentsline{toc}{part}{ХАВСРАЛТ}
+\appendix
+\renewcommand\bibname{Хавсралт}
+\addcontentsline{toc}{part}{ХАВСРАЛТ}
 
-% \chapter{Prisma модел}
-% \label{appendix:prisma-model}
+\chapter{Өгөгдөл боловсруулах функц}
+\label{appendix:data-calculation}
 
-% \begin{lstlisting}[language=Javascript, frame=single]
-% 	generator client {
-% 		provider = "prisma-client-js"
-% 		previewFeatures = ["interactiveTransactions"]
-% 	}
-	
-% 	datasource db {
-% 		provider = "postgresql"
-% 		url      = env("DATABASE_URL")
-% 		shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
-% 	}
-	
-% 	model User {
-% 		id         Int    @id @default(autoincrement())
-% 		username   String
-% 		email      String
-% 		password   String
-% 		profileImg String
-	
-% 		followers Follows[] @relation("following")
-% 		following Follows[] @relation("follower")
-% 		votes Votes[] @relation("userVotes")
-	
-% 		posts Post[]
-% 		createdAt DateTime @default(now())
-% 		updatedAt DateTime @updatedAt
-% 	}
-	
-% 	model Post {
-% 		id       Int    @id @default(autoincrement())
-% 		ogUrl    String
-% 		ogTitle  String
-% 		ogImage  String
-% 		authorId Int
-% 		author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
-% 		groupId  Int?
-% 		group    Group? @relation(fields: [groupId], references: [id])
-	
-% 		votes Votes[] @relation("postVotes")
-	
-% 		tags       Tag[]
-% 		categories Category[]
-	
-% 		createdAt DateTime @default(now())
-% 		updatedAt DateTime @updatedAt
-% 	}
-	
-% 	model Tag {
-% 		id   Int    @id @default(autoincrement())
-% 		name String
-	
-% 		posts Post[]
-	
-% 		createdAt DateTime @default(now())
-% 		updatedAt DateTime @updatedAt
-% 	}
-	
-% 	model Category {
-% 		id   Int    @id @default(autoincrement())
-% 		name String
-	
-% 		posts Post[]
-	
-% 		createdAt DateTime @default(now())
-% 		updatedAt DateTime @updatedAt
-% 	}
-	
-% 	model Group {
-% 		id          Int    @id @default(autoincrement())
-% 		title       String
-% 		description String
-	
-% 		createdAt DateTime @default(now())
-% 		updatedAt DateTime @updatedAt
-% 		Post      Post[]
-% 	}
-	
-% 	model Follows {
-% 		follower    User @relation("follower", fields: [followerId], references: [id])
-% 		followerId  Int
-% 		following   User @relation("following", fields: [followingId], references: [id])
-% 		followingId Int
-	
-% 		@@id([followerId, followingId])
-	
-% 		createdAt DateTime @default(now())
-% 	}
-	
-% 	model Votes {
-% 		id          Int    @id @default(autoincrement())
-% 		user User @relation("userVotes",fields: [userId], references: [id])
-% 		userId Int
-% 		post Post @relation("postVotes",fields:[postId],references:[id])
-% 		postId Int
-% 		vote String
-	
-% 		createdAt DateTime @default(now())
-% 		updatedAt DateTime @updatedAt
-% 		deletedAt DateTime?
-% 	}
-% \end{lstlisting}
+\begin{lstlisting}[language=Javascript, frame=single]
+let wpmValues: number[] = [];
 
-% \chapter{Prisma Client ашиглах}
-% \label{appendix:prisma-client}
+export const calculateWPM = (
+  time_taken: number,
+  num_words: number
+): { currentWPM: string | number; highestWPM: number; lowestWPM: number } => {
+  const wpm: string | number =
+    time_taken > 0 ? ((num_words / time_taken) * 60).toFixed(0) : 0;
 
-% \begin{lstlisting}[language=Javascript, frame=single]
-% 	import { PrismaClient } from '@prisma/client'
+  wpmValues.push(Number(wpm));
 
-% 	let prisma: PrismaClient
-	
-% 	if (process.env.NODE_ENV === 'production') {
-% 		prisma = new PrismaClient()
-% 	} else {
-% 		if (!global.prisma) {
-% 			global.prisma = new PrismaClient()
-% 		}
-% 		prisma = global.prisma
-% 	}
-	
-% 	export default prisma
-% \end{lstlisting}
+  const highestWPM: number = Math.max(...wpmValues);
+  const lowestWPM: number = Math.min(...wpmValues);
 
-% \chapter{Next.js дээр remote домайн зөвшөөрөх}
-% \label{appendix:next-config}
+  return {
+    currentWPM: wpm,
+    highestWPM,
+    lowestWPM,
+  };
+};
 
-% \begin{lstlisting}[language=Javascript, frame=single]
-% 	@type {import('next').NextConfig}
-% 	const nextConfig = {
-% 		reactStrictMode: true,
-% 		images: {
-% 			remotePatterns: [
-% 				{
-% 					protocol: "https",
-% 					hostname: "**",
-% 				},
-% 				{
-% 					protocol: "http",
-% 					hostname: "**",
-% 				},
-% 			],
-% 		},
-% 	};
-	
-% 	module.exports = nextConfig;
-	
-% \end{lstlisting}
+export const calculateAccuracy = (
+  correct: number,
+  wrong: number
+): string | number => {
+  return correct + wrong > 0
+    ? ((correct / (correct + wrong)) * 100).toFixed(1)
+    : 0;
+};
 
-% \chapter{Tailwind custom-class үүсгэх}
-% \label{appendix:custom-class}
+export const timeAgo = (curr_date: string): string => {
+  const seconds = Math.floor(
+    (new Date().getTime() - new Date(curr_date).getTime()) / 1000
+  );
 
-% \begin{lstlisting}[language=Javascript, frame=single]
-% 	@tailwind base;
-% 	@tailwind components;
-% 	@tailwind utilities;
-	
-% 	@layer components {
-% 		.sidebar-icon {
-% 			@apply flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg transition-all duration-75 hover:border-2 hover:border-primary;
-% 		}
-	
-% 		.sidebar-icon-active {
-% 			@apply flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border-2 border-primary bg-white hover:bg-gray100;
-% 		}
-	
-% 		.tooltip {
-% 			@apply absolute left-14 z-10 m-2 w-auto min-w-max origin-left scale-0 rounded-md bg-gray-900 p-2 text-xs font-bold text-white shadow-md transition-all duration-100;
-% 		}
-	
-% 		.vote-btn {
-% 			@apply grid h-8 w-8 cursor-pointer place-content-center rounded-lg border border-gray200 bg-white hover:border-gray100;
-% 		}
-	
-% 		.bar {
-% 			@apply z-0 my-1 flex justify-between px-5 py-3 text-sm text-description transition-all duration-100 hover:text-black;
-% 		}
-	
-% 		.chip {
-% 			@apply flex h-5 items-center rounded-md border border-gray100 bg-gray300 px-1 text-xs;
-% 		}
-	
-% 		.bar-active {
-% 			@apply relative z-0 my-1 flex justify-between px-5 py-3 text-sm transition-all duration-100 hover:text-black;
-% 		}
-	
-% 		.chip-active {
-% 			@apply flex h-5 items-center rounded-md bg-black px-1 text-xs text-white;
-% 		}
-% 	}
-	
-% \end{lstlisting}
+  const time_tables = [
+    { label: "year", div: 31536000 },
+    { label: "month", div: 2592000 },
+    { label: "day", div: 86400 },
+    { label: "hour", div: 3600 },
+    { label: "minute", div: 60 },
+  ];
 
-% \chapter{Хэрэглэгчийн мэдээллийг гаргах endpoint}
-% \label{appendix:user-post-endpoint}
+  for (const table of time_tables) {
+    const { label, div } = table;
+    const interval = seconds / div;
+    if (interval >= 1) {
+      return `${Math.floor(interval).toString()} ${label}${
+        interval > 1 ? "s" : ""
+      } ago`;
+    }
+  }
+  return "Just now";
+};
 
-% \begin{lstlisting}[language=Javascript, frame=single]
-% 	import { NextApiRequest, NextApiResponse } from "next";
-% 	import prisma from "../../../../lib/prisma";
-	
-% 	export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-% 		try {
-			
-% 			const uId = parseInt(req.query.id as string, 10)
-			
-% 			const resultDB = await prisma.user.findUnique({
-% 				where: {
-% 					id: uId
-% 				},
-% 				select: {
-% 					id: true,
-% 					username: true,
-% 					profileImg: true,
-% 					posts: {
-% 						select: {
-% 							id: true,
-% 							ogUrl: true,
-% 							ogTitle: true,
-% 							ogImage: true,
-% 							tags: true,
-% 							group: true,
-% 						},
-% 					}
-% 				}
-% 			})
-	
-% 			res.status(200).json(resultDB);
-% 		} catch (err) {
-% 			res.status(403).json({ err: "Error occured"})
-% 		}
-% 	}
-% \end{lstlisting}
+\end{lstlisting}
 
-% \chapter{Холбоос дээр Vote өгөх endpoint}
-% \label{appendix:user-vote-endpoint}
+\chapter{Өгөгдлийг ашиглах компонент}
+\label{appendix:data-usage}
 
-% \begin{lstlisting}[language=Javascript, frame=single]
-% 	import {NextApiRequest, NextApiResponse} from "next";
-% 	import {Prisma} from "@prisma/client";
-% 	import {instanceOf} from "prop-types";
-% 	import prisma from "../../../../lib/prisma";
-	
-	
-% 	export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-% 			const requestMethod = req.method
-% 			switch (requestMethod){
-% 					case 'GET':
-% 							let following;
-% 							try{
-% 									let postId = parseInt(req.query.id as string, 10)
-% 									const totalVote = await VotesTotal(postId)
-% 									res.status(200).json({totalVote})
-% 							} catch (e) {
-% 									if (e instanceof Prisma.PrismaClientKnownRequestError) {
-% 											if (e.code === 'P2002') {
-% 													res.json({totalVote:0})
-% 											}else{
-% 													res.status(400).json(e)
-% 											}
-% 									} else {
-% 											console.log(e)
-% 											res.status(500).json({message: "something wrong try again some time later"})
-% 									}
-% 							}
-% 							break
-% 					case 'POST':
-% 							if (req.body.vote!='up'&&req.body.vote!='down'){
-% 									res.status(400)
-% 							}
-% 							let postId = parseInt(req.query.id as string, 10)
-% 							let userId = 1
-% 							let vote = req.body.vote
-% 							await Vote(userId,postId,vote)
-% 							const totalVote = await VotesTotal(postId)
-% 							res.status(200).json({totalVote})
-% 							break
-	
-% 					default: res.status(404)
-% 			}
-% 	}
-	
-% 	async function Vote(userId:number, postId:number, vote:string){
-% 			return await prisma.$transaction(async (tx) => {
-% 					try {
-% 				const haveVotes = await tx.votes.findFirst({
-% 						where:{
-% 								userId,
-% 								postId,
-% 								deletedAt:null
-% 						},
-% 						orderBy:{
-% 						id:'desc'
-% 						}
-% 				})
-% 					if (haveVotes?.vote==vote){
-% 							return await tx.votes.updateMany({
-% 									where:{
-% 											userId,
-% 											postId,
-% 											deletedAt:null
-% 									},
-% 									data:{
-% 											deletedAt: new Date()
-% 									}
-% 							})
-% 					}else{
-% 							await  tx.votes.updateMany({
-% 									where:{
-% 											userId,
-% 											postId,
-% 											deletedAt:null
-% 									},
-% 									data:{
-% 											deletedAt: new Date()
-% 									}
-% 							})
-% 						 return await tx.votes.create({
-% 									data:{
-% 											user:{
-% 													connect:{
-% 															id: userId
-% 													}
-% 											},
-% 											post: {
-% 													connect:{
-% 															id: postId
-% 													}
-% 											},
-% 											deletedAt: null,
-% 											vote,
-% 									}
-% 							})
-% 					}
-% 					}catch (e) {
-% 							if (e instanceof Prisma.PrismaClientKnownRequestError && e.code == 'P2002') {
-% 									return await tx.votes.create({
-% 											data:{
-% 													user:{
-% 															connect:{
-% 																	id: userId
-% 															}
-% 													},
-% 													post: {
-% 															connect:{
-% 																	id: postId
-% 															}
-% 													},
-% 													deletedAt: null,
-% 													vote,
-% 											}
-% 									})
-% 							}else{
-% 									throw e
-% 							}
-% 					}
-% 					return 1
-% 		})
-% 	}
-	
-% 	export function VotesTotal(postId:number){
-	
-% 			return  prisma.$transaction(async (tx) => {
-% 					const totalUp = await tx.votes.count({
-% 							where:{
-% 									postId,
-% 									deletedAt:null,
-% 									vote: 'up'
-% 							}
-% 					})
-	
-% 					const totalDown = await tx.votes.count({
-% 							where:{
-% 									postId,
-% 									deletedAt:null,
-% 									vote: 'down'
-% 							}
-% 					})
-	
-% 					return totalUp-totalDown
-% 			})
-% 	}
-	
-% 	async function getLastVote(userID, postID){
-% 			const lastVote = prisma.votes.findFirst({
-% 					where:{
-% 							userId: userID,
-% 							post: postID,
-% 							deletedAt:null
-% 					}
-% 			})
-% 			return lastVote
-% 	}
-	
-% 	async function DeletePreviousVotes(userId, postId){
-% 			const res= await prisma.votes.updateMany({
-% 							where:{
-% 									userId,
-% 									postId
-% 							},
-% 							data:{
-% 									deletedAt: new Date()
-% 							}
-% 					}
-% 			)
-% 			return res
-% 	}
-	
-% 	async function HaveVotes(userID, postID){
-% 			try {
-% 					const lastVote = await getLastVote(userID,postID)
-% 			}catch (e) {
-% 					if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
-% 									return false
-% 					} else {
-% 							throw e
-% 					}
-% 			}
-% 	}
-	
-% \end{lstlisting}
+\begin{lstlisting}[language=Javascript, frame=single]
+	<ResultModal
+		open={showModal}
+		onClose={handleCloseModal}
+		handleRetry={handleRetry}
+		handleLeave={handleLeave}
+		wpm={calculateWPM(time, wordIndex).currentWPM}
+		time={time}
+		accuracy={calculateAccuracy(correct, wrong)}
+		failed={failed}
+	/>
 
-% \chapter{Layout компонентийг App компонент дээр ашиглах}
-% \label{appendix:layout-component}
+	interface ResultModalProps {
+  open: boolean;
+  onClose: () => void;
+  handleRetry: () => void;
+  handleLeave: () => void;
+  wpm: any;
+  time: any;
+  accuracy: any;
+  failed: any;
+}
 
-% \begin{lstlisting}[language=Javascript, frame=single]
-% 	import "../styles/globals.css";
-% 	import "../styles/main.css";
-% 	import { Layout } from "../components/Layout";
-% 	import { Rubik } from "@next/font/google";
-	
-% 	const rubik = Rubik({
-% 		subsets: ["cyrillic-ext", "cyrillic", "latin", "latin-ext"],
-% 		variable: "--font-rubik",
-% 	});
-	
-% 	function MyApp({ Component, pageProps }) {
-% 		return (
-% 			<main className={`${rubik.variable} font-sans`}>
-% 				<Layout>
-% 					<Component {...pageProps} />
-% 				</Layout>
-% 			</main>
-% 		);
-% 	}
-	
-% 	export default MyApp;
-	
-% \end{lstlisting}
+function ResultModal({
+  open,
+  onClose,
+  handleRetry,
+  handleLeave,
+  wpm,
+  time,
+  accuracy,
+  failed,
+}:)
+\end{lstlisting}
 
-% % \newpage
-% % \pagenumbering{gobble}
-% % \includepdf[pages=-,pagecommand={},width=\textwidth]{todorhoilolt.pdf}
+\chapter{MUI компонент ашиглах}
+\label{appendix:mui-component}
+
+\begin{lstlisting}[language=Javascript, frame=single]
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import { Grid } from "@mui/material";
+
+  return (
+    <>
+      <Container>
+        <Card className={style.cardBody}>
+          <Typography
+            variant="h3"
+            fontWeight={"bold"}
+            className={roboto.className}
+            pt={4}
+            pl={3}
+            pb={1}
+          >
+            Тэргүүлэгчдийн самбар
+          </Typography>
+          <Typography
+            variant="body1"
+            className={roboto1.className}
+            pl={3}
+            color={"gray"}
+          >
+            Бусад хэрэглэгчидтэй өрсөлдөж, тэргүүлэгчдийн самбарын тэргүүн
+            байрыг зорь.
+          </Typography>
+          <div className={style.buttons}>
+            <Button
+              variant="text"
+              className={`${rubik.className} ${style.filterBtn}`}
+            >
+              7 хоног
+            </Button>
+            <Button
+              variant="text"
+              className={`${rubik.className} ${style.filterBtn}`}
+            >
+              сар
+            </Button>
+            <Button
+              variant="text"
+              className={`${rubik.className} ${style.filterBtn}`}
+            >
+              жил
+            </Button>
+          </div>
+      </Container>
+    </>
+  );
+\end{lstlisting}
+
+\chapter{Auth Session зохицуулах}
+\label{appendix:session-provider-implementation}
+
+\begin{lstlisting}[language=Javascript, frame=single]
+	export const authOptions = {
+  pages: {
+    signIn: "/login",
+  },
+
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {},
+      async authorize(credentials): Promise<any> {
+        return await signInWithEmailAndPassword(
+          auth,
+          (credentials as any).email || "",
+          (credentials as any).password || ""
+        )
+          .then((userCredential) => {
+            if (userCredential.user) {
+              return userCredential.user;
+            }
+            return null;
+          })
+          .catch((error) => console.log(error))
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(error);
+          });
+      },
+    }),
+  ],
+};
+
+export default NextAuth(authOptions);
+
+
+\end{lstlisting}
+
+
+\chapter{Auth Session ашиглах}
+\label{appendix:session-provider-usage}
+
+\begin{lstlisting}[language=Javascript, frame=single]
+	"use client";
+
+import styles from "./page.module.css";
+import Navbar from "@/components/navbar/navbar";
+import MainPage from "@/components/mainpage/mainpage";
+import Footer from "@/components/footer/footer";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+
+export default function Home() {
+  const session = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("/login");
+    },
+  });
+
+  return (
+    <div>
+      <Navbar></Navbar>
+      <MainPage></MainPage>
+      <Footer></Footer>
+    </div>
+  );
+}
+
+Home.requireAuth = true;
+
+\end{lstlisting}
+
+\chapter{Socket дээр cors зөвшөөрөх}
+\label{appendix:socket-cors-config}
+
+\begin{lstlisting}[language=Javascript, frame=single]
+	const app = express();
+	app.use(cors());
+	
+	const server = createServer(app);
+	const io = new Server(server, {
+		cors: {
+			origin: "*",
+			methods: "*",
+		},
+	});
+	
+\end{lstlisting}
+
+
+\chapter{Socket server}
+\label{appendix:socket-server}
+
+\begin{lstlisting}[language=Javascript, frame=single]
+
+	const roomUsers = {};
+
+	io.on("connection", (socket) => {
+		console.log("A user connected: " + socket.id);
+	
+		socket.on("create-room", (textId) => {
+			const roomId = Math.random().toString(36).substring(2, 7);
+	
+			socket.join(roomId);
+	
+			roomUsers[roomId] = {
+				textId: textId,
+				users: [],
+			};
+			roomUsers[roomId].users.push(socket.id);
+			console.log(`User created and joined room ${roomId}`);
+	
+			io.to(roomId).emit("room-created", roomId);
+			console.log(roomUsers);
+		});
+	
+		socket.on("join-room", (roomId) => {
+			socket.join(roomId);
+			console.log(roomUsers);
+	
+			if (!roomUsers[roomId]) {
+				roomUsers[roomId] = { textId: 0, users: [] };
+			}
+	
+			roomUsers[roomId].users.push(socket.id);
+	
+			io.to(roomId).emit(
+				"room-joined",
+				roomUsers[roomId].users.length,
+				roomUsers[roomId].textId
+			);
+	
+			console.log(`${roomId} өрөөнийхөн ${roomUsers[roomId].users}`);
+		});
+	
+		socket.on("disconnect", () => {
+			console.log("User disconnected");
+			Object.keys(roomUsers).forEach((room) => {
+				roomUsers[room].users = roomUsers[room].users.filter(
+					(user) => user !== socket.id
+				);
+				console.log(
+					`Users in room ${room} after disconnect:`,
+					roomUsers[room].users
+				);
+	
+				if (roomUsers[room].users.length === 0) {
+					delete roomUsers[room];
+				}
+			});
+		});
+	});
+	
+	const PORT = 3030;
+	server.listen(PORT, () => {
+		console.log(`Socket.IO server running on http://localhost:${PORT}`);
+	});	
+\end{lstlisting}
+
+% \newpage
+% \pagenumbering{gobble}
+% \includepdf[pages=-,pagecommand={},width=\textwidth]{todorhoilolt.pdf}

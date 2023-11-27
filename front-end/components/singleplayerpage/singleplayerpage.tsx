@@ -128,27 +128,49 @@ const SinglePlayerPage = () => {
       clearInterval(timeLimit);
       setFailed(false);
       setShowModal(true);
+
+      const date = new Date();
+
+      set(ref(db, "race/" + raceId), {
+        race_type_id: 1,
+        text_id: textId,
+        created_at: date.toString(),
+        updated_at: date.toString(),
+      });
+
+      set(ref(db, "user_statistics/" + userId), {
+        user_email: session?.data?.user?.email,
+        avg_wfm: calculateWPM(time, wordIndex).currentWPM,
+        avg_accuracy: calculateAccuracy(correct, wrong),
+        highest_wpm: calculateWPM(time, wordIndex).highestWPM,
+        total_time: time,
+        race_id: raceId,
+        created_at: date.toString(),
+        updated_at: date.toString(),
+      });
     } else if (status === "finished") {
       clearInterval(timeLimit);
       setFailed(true);
       setShowModal(true);
 
+      const date = new Date();
+
       set(ref(db, "race/" + raceId), {
-        creator_id: session?.data?.user?.email,
         race_type_id: 1,
         text_id: textId,
-        created_at: Date.now(),
-        updated_at: Date.now(),
+        created_at: date.toString(),
+        updated_at: date.toString(),
       });
 
       set(ref(db, "user_statistics/" + userId), {
-        user_id: session?.data?.user?.email,
+        user_email: session?.data?.user?.email,
         avg_wfm: calculateWPM(time, wordIndex).currentWPM,
         avg_accuracy: calculateAccuracy(correct, wrong),
         highest_wpm: calculateWPM(time, wordIndex).highestWPM,
-        lowest_wpm: calculateWPM(time, wordIndex).lowestWPM,
-        created_at: Date.now(),
-        updated_at: Date.now(),
+        total_time: time,
+        race_id: raceId,
+        created_at: date.toString(),
+        updated_at: date.toString(),
       });
     }
 

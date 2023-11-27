@@ -2,14 +2,15 @@
   margin: 3rem;
 }
 
-.topText{
+.topText {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.linkText{
+.linkText {
   font-weight: bold;
+  cursor: pointer;
 }
 
 .cardBody {
@@ -86,13 +87,41 @@
 
 .typingField {
   width: 100%;
+  font-weight: bold;
   border: 1px solid black;
 }
 
 .leaveBtn {
   background-color: rgb(var(--main-color));
-  margin-top: 3rem;
+  margin-top: 2rem;
   color: white;
   border-radius: 10px;
   width: 20%;
+}
+
+.greenText {
+  color: green;
+}
+
+.redText {
+  color: red;
+}
+
+.grayBorder {
+  background-color: #e5e7eb;
+  outline: 1px solid #718096;
+  border-radius: 0.125rem;
+}
+
+.renderTest {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.loadBody {
+  padding: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }

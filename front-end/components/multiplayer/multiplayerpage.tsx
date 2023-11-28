@@ -55,6 +55,7 @@ const MultiPlayerPage = () => {
   //socket
   const [socket, setSocket] = useState<Socket | null>(null);
   const searchParams = useSearchParams();
+  const [users, setUsers] = useState([]);
 
   const session = useSession({
     required: true,
@@ -63,47 +64,71 @@ const MultiPlayerPage = () => {
     },
   });
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const race_text = await fetch(
+  //         "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/race_text.json"
+  //       );
+
+  //       const race = await fetch(
+  //         "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/race.json"
+  //       );
+
+  //       const user_statistics = await fetch(
+  //         "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/user_statistics.json"
+  //       );
+
+  //       if (race_text.ok) {
+  //         const data = await race_text.json();
+  //         const id = Math.floor(Math.random() * data.length);
+  //         const quote = data[id];
+
+  //         setTextId(id);
+  //         setWords(quote.content);
+  //       } else {
+  //         console.error(
+  //           `Error: Unable to fetch data. Status Code: ${race_text.status}`
+  //         );
+  //       }
+  //       if (race.ok) {
+  //         const race_data = await race.json();
+  //         const raceId = race_data.length;
+  //         setRaceId(raceId);
+  //       }
+  //       if (user_statistics.ok) {
+  //         const user_data = await user_statistics.json();
+  //         const userId = user_data.length;
+  //         setUserId(userId);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const race_text = await fetch(
-          "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/race_text.json"
+        const text = await fetch("http://localhost:3030/api/race_text");
+        const textData = await text.json();
+        setWords(textData.content);
+
+        const raceResponse = await fetch("http://localhost:3030/api/race");
+        const raceId = await raceResponse.json();
+        setRaceId(raceId);
+
+        const userStatisticsResponse = await fetch(
+          "http://localhost:3030/api/user_statistics"
         );
-
-        const race = await fetch(
-          "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/race.json"
-        );
-
-        const user_statistics = await fetch(
-          "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/user_statistics.json"
-        );
-
-        if (race_text.ok) {
-          const data = await race_text.json();
-          const id = Math.floor(Math.random() * data.length);
-          const quote = data[id];
-
-          setTextId(id);
-          setWords(quote.content);
-        } else {
-          console.error(
-            `Error: Unable to fetch data. Status Code: ${race_text.status}`
-          );
-        }
-        if (race.ok) {
-          const race_data = await race.json();
-          const raceId = race_data.length;
-          setRaceId(raceId);
-        }
-        if (user_statistics.ok) {
-          const user_data = await user_statistics.json();
-          const userId = user_data.length;
-          setUserId(userId);
-        }
+        const userStatisticsId = await userStatisticsResponse.json();
+        setUserId(userStatisticsId);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
+
     fetchData();
   }, []);
 
@@ -357,17 +382,19 @@ const MultiPlayerPage = () => {
   useEffect(() => {
     const socket = io("http://localhost:3030");
     setSocket(socket);
+
     const setupSocket = () => {
       if (searchParams!.get("roomId")) {
         const roomId = searchParams!.get("roomId");
         socket!.emit("join-room", roomId);
-
-        socket.on("room-joined", (userCount, roomTextId) => {
-          // setTextId(roomTextId);
-        });
       } else {
-        socket!.emit("create-room", textId);
+        socket!.emit("create-room", words);
       }
+
+      socket.on("update-room", ({ users, text }) => {
+        setUsers(users);
+        // setWords(text);
+      });
 
       return () => {
         socket!.disconnect();
@@ -431,14 +458,16 @@ const MultiPlayerPage = () => {
                 </Typography>
               </div>
 
-              <PlayContent
-                name="Dakie"
-                progress={progress}
-                wpm={calculateWPM(time, wordIndex).currentWPM}
-                completion={calculateAccuracy(correct, wrong)}
-                style={style}
-              />
-
+              {users.map((userId) => (
+                <PlayContent
+                  key={userId}
+                  name="Dakie"
+                  progress={progress}
+                  wpm={calculateWPM(time, wordIndex).currentWPM}
+                  completion={calculateAccuracy(correct, wrong)}
+                  style={style}
+                />
+              ))}
               <div className={style.typingTextContainer}>
                 <Typography
                   variant="body1"

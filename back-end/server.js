@@ -15,6 +15,53 @@ const io = new Server(server, {
   },
 });
 
+// Text generation api
+app.get("/api/race_text", async (req, res) => {
+  try {
+    const raceTextData = await fetch(
+      "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/race_text.json"
+    );
+
+    const raceText = await raceTextData.json();
+    const textId = Math.floor(Math.random() * raceText.length);
+    const quote = raceText[textId];
+
+    res.json(quote);
+  } catch (error) {
+    console.error("Error fetching race_text:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/api/race", async (req, res) => {
+  try {
+    const raceData = await fetch(
+      "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/race.json"
+    );
+    const race = await raceData.json();
+    const raceId = race.length;
+    res.json(raceId);
+  } catch (error) {
+    console.error("Error fetching race:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/api/user_statistics", async (req, res) => {
+  try {
+    const userStatisticsData = await fetch(
+      "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/user_statistics.json"
+    );
+    const userStatistics = await userStatisticsData.json();
+    const userStatisticsId = userStatistics.length;
+    res.json(userStatisticsId);
+  } catch (error) {
+    console.error("Error fetching user_statistics:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+//Socket
 const roomUsers = {};
 
 io.on("connection", (socket) => {
@@ -27,13 +74,13 @@ io.on("connection", (socket) => {
 
     roomUsers[roomId] = {
       textId: textId,
-      users: [],
+      users: [socket.id],
     };
-    roomUsers[roomId].users.push(socket.id);
     console.log(`User created and joined room ${roomId}`);
 
     io.to(roomId).emit("room-created", roomId);
-    console.log(roomUsers);
+
+    updateRoom(roomId);
   });
 
   socket.on("join-room", (roomId) => {
@@ -46,17 +93,12 @@ io.on("connection", (socket) => {
 
     roomUsers[roomId].users.push(socket.id);
 
-    io.to(roomId).emit(
-      "room-joined",
-      roomUsers[roomId].users.length,
-      roomUsers[roomId].textId
-    );
-
-    console.log(`${roomId} өрөөнийхөн ${roomUsers[roomId].users}`);
+    updateRoom(roomId);
   });
 
   socket.on("disconnect", () => {
     console.log("User disconnected");
+
     Object.keys(roomUsers).forEach((room) => {
       roomUsers[room].users = roomUsers[room].users.filter(
         (user) => user !== socket.id
@@ -69,8 +111,23 @@ io.on("connection", (socket) => {
       if (roomUsers[room].users.length === 0) {
         delete roomUsers[room];
       }
+
+      updateRoom(room);
     });
   });
+
+  function updateRoom(roomId) {
+    if (roomUsers[roomId]) {
+      const usersInRoom = roomUsers[roomId].users;
+
+      usersInRoom.forEach((userId) => {
+        io.to(userId).emit("update-room", {
+          users: usersInRoom,
+          textId: roomUsers[roomId].textId,
+        });
+      });
+    }
+  }
 });
 
 const PORT = 3030;

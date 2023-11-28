@@ -39,7 +39,7 @@ const SinglePlayerPage = () => {
   const [charIndex, setCharIndex] = useState(0);
   const [wordIndex, setWordIndex] = useState(0);
   const [charStatus, setCharStatus] = useState<any[]>([]);
-  const [textId, setWordId] = useState(0);
+  const [textId, setTextId] = useState(0);
   const [raceId, setRaceId] = useState(0);
   const [userId, setUserId] = useState(0);
   const [words, setWords] = useState("");
@@ -56,47 +56,71 @@ const SinglePlayerPage = () => {
     },
   });
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const race_text = await fetch(
+  //         "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/race_text.json"
+  //       );
+
+  //       const race = await fetch(
+  //         "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/race.json"
+  //       );
+
+  //       const user_statistics = await fetch(
+  //         "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/user_statistics.json"
+  //       );
+
+  //       if (race_text.ok) {
+  //         const data = await race_text.json();
+  //         const id = Math.floor(Math.random() * data.length);
+  //         const quote = data[id];
+
+  //         setTextId(id);
+  //         setWords(quote.content);
+  //       } else {
+  //         console.error(
+  //           `Error: Unable to fetch data. Status Code: ${race_text.status}`
+  //         );
+  //       }
+  //       if (race.ok) {
+  //         const race_data = await race.json();
+  //         const raceId = race_data.length;
+  //         setRaceId(raceId);
+  //       }
+  //       if (user_statistics.ok) {
+  //         const user_data = await user_statistics.json();
+  //         const userId = user_data.length;
+  //         setUserId(userId);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const race_text = await fetch(
-          "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/race_text.json"
+        const text = await fetch("http://localhost:3030/api/race_text");
+        const textData = await text.json();
+        setWords(textData.content);
+
+        const raceResponse = await fetch("http://localhost:3030/api/race");
+        const raceId = await raceResponse.json();
+        setRaceId(raceId);
+
+        const userStatisticsResponse = await fetch(
+          "http://localhost:3030/api/user_statistics"
         );
-
-        const race = await fetch(
-          "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/race.json"
-        );
-
-        const user_statistics = await fetch(
-          "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/user_statistics.json"
-        );
-
-        if (race_text.ok) {
-          const data = await race_text.json();
-          const id = Math.floor(Math.random() * data.length);
-          const quote = data[id];
-
-          setWordId(id);
-          setWords(quote.content);
-        } else {
-          console.error(
-            `Error: Unable to fetch data. Status Code: ${race_text.status}`
-          );
-        }
-        if (race.ok) {
-          const race_data = await race.json();
-          const raceId = race_data.length;
-          setRaceId(raceId);
-        }
-        if (user_statistics.ok) {
-          const user_data = await user_statistics.json();
-          const userId = user_data.length;
-          setUserId(userId);
-        }
+        const userStatisticsId = await userStatisticsResponse.json();
+        setUserId(userStatisticsId);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
+
     fetchData();
   }, []);
 

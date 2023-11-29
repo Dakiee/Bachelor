@@ -20,10 +20,10 @@ const AboutPageContent = () => {
           className={`${rubik.className} ${style.mainText}`}
           marginTop={"2rem"}
         >
-          Created with love by Davaa
+          Created with love by Dakie
         </Typography>
         <Typography className={`${rubik.className} ${style.mainText}`}>
-          Launched on 10th of October
+          10-р сарын 10-нд эхэлсэн
         </Typography>
 
         <Grid container my={3}>
@@ -32,14 +32,14 @@ const AboutPageContent = () => {
               textAlign={"center"}
               className={`${rubik.className} ${style.mainText}`}
             >
-              total started tests
+              нийт тестүүд
             </Typography>
             <Typography
               textAlign={"center"}
               className={`${rubik.className} ${style.statText}`}
             >
               1<br />
-              billion
+              тэрбум
             </Typography>
           </Grid>
           <Grid item xs={4}>
@@ -47,7 +47,7 @@ const AboutPageContent = () => {
               textAlign={"center"}
               className={`${rubik.className} ${style.mainText}`}
             >
-              total time typing
+              бичсэн нийт хугацаа
             </Typography>
             <Typography
               textAlign={"center"}
@@ -55,7 +55,7 @@ const AboutPageContent = () => {
             >
               236
               <br />
-              years
+              жил
             </Typography>
           </Grid>
           <Grid item xs={4}>
@@ -63,7 +63,7 @@ const AboutPageContent = () => {
               textAlign={"center"}
               className={`${rubik.className} ${style.mainText}`}
             >
-              total completed tests
+              нийт дууссан тестүүд
             </Typography>
             <Typography
               textAlign={"center"}
@@ -71,7 +71,7 @@ const AboutPageContent = () => {
             >
               300
               <br />
-              million
+              сая
             </Typography>
           </Grid>
         </Grid>
@@ -80,7 +80,7 @@ const AboutPageContent = () => {
             textAlign={"left"}
             className={`${rubik.className} ${style.footerText}`}
           >
-            about
+            тухай
           </Typography>
           <Typography className={`${rubik.className} ${style.mainText}`}>
             duckrace is a minimalistic and customizable typing test. It features

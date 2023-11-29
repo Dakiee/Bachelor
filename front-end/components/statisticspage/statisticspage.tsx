@@ -6,10 +6,9 @@ import style from "./statistics.module.css";
 import { useSession } from "next-auth/react";
 import { Rubik } from "next/font/google";
 import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const rubik = Rubik({ subsets: ["latin"] });
-
-
 
 const StatisticsPage = () => {
   const session = useSession({
@@ -18,7 +17,82 @@ const StatisticsPage = () => {
       redirect("/login");
     },
   });
-  
+  const [userName, setName] = useState("");
+  const [avgWFM, setAvgWFM] = useState(0);
+  const [highestWFM, setHighestWFM] = useState(0);
+  const [totalTime, setTotalTime] = useState("");
+  const [averageAccuracy, setAverageAccuracy] = useState(0);
+  const [testCount, setTestCount] = useState("");
+
+  useEffect(() => {
+    const originalName = session?.data?.user?.email;
+
+    if (originalName) {
+      const atIndex = originalName.indexOf("@");
+
+      if (atIndex !== -1) {
+        const modifiedName = originalName.substring(0, atIndex);
+        setName(modifiedName);
+      } else {
+        console.log("Invalid name format");
+      }
+    } else {
+      console.log("User name not available");
+    }
+  }, [session?.data?.user?.email]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const responseData = await fetch(
+          "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/user_statistics.json"
+        );
+        const data = await responseData.json();
+        const email = session?.data?.user?.email;
+
+        const filteredData = data.filter(
+          (entry: any) => entry.user_email === email
+        );
+
+        if (filteredData.length === 0) {
+          return null;
+        }
+
+        const total_time = filteredData.reduce(
+          (sum: any, entry: any) => sum + entry.total_time,
+          0
+        );
+        const highest_wpm = Math.max(
+          ...filteredData.map((entry: any) => entry.highest_wpm)
+        );
+        const average_wpm =
+          filteredData.reduce(
+            (sum: any, entry: any) => sum + parseInt(entry.avg_wfm),
+            0
+          ) / filteredData.length;
+
+        const totalData = filteredData.length;
+        const averageAccuracy =
+          filteredData.reduce(
+            (sum: any, entry: any) => sum + parseFloat(entry.avg_accuracy),
+            0
+          ) / totalData;
+
+        setTotalTime(total_time);
+        setHighestWFM(highest_wpm);
+        setAvgWFM(average_wpm);
+        setTestCount(totalData);
+        setTotalTime(total_time);
+        setAverageAccuracy(averageAccuracy);
+
+      } catch (error) {
+        console.error("Error fetching user statistics:", error);
+      }
+    };
+
+    fetchData();
+  }, [session?.data?.user?.email]);
+
   const StatCard = (props: any) => {
     const { value, fieldName, backgroundColor } = props;
 
@@ -61,26 +135,19 @@ const StatisticsPage = () => {
     <>
       <Container>
         <Card className={style.firstCard}>
-          {/* <Image
-            src="/assets/img/google.png"
-            width={20}
-            height={20}
-            alt="Picture of the google btn"
-            className={style.googleImg}
-          ></Image> */}
           <Typography
             variant="body1"
             color="black"
             className={`${rubik.className} ${style.firstCardHeaderText}`}
           >
-            Dakie
+            {userName}
           </Typography>
           <Typography
             variant="body1"
             color="black"
             className={`${rubik.className} ${style.firstCardMailText}`}
           >
-            <div className="text-white">{session?.data?.user?.email}</div>
+            {session?.data?.user?.email}
           </Typography>
         </Card>
         <Card className={style.secondCard}>
@@ -94,35 +161,35 @@ const StatisticsPage = () => {
           <Grid container spacing={2} mx={2}>
             <Grid item xs={4}>
               <StatCard
-                value={120}
+                value={testCount}
                 fieldName="Туршилтын тоо"
                 backgroundColor="#FFD0D0"
               />
             </Grid>
             <Grid item xs={4}>
               <StatCard
-                value={120}
+                value={avgWFM}
                 fieldName="Дундаж WPM"
                 backgroundColor="#E6FFD2"
               />
             </Grid>
             <Grid item xs={4}>
               <StatCard
-                value={120}
+                value={averageAccuracy}
                 fieldName="Дундаж нарийвчлал"
                 backgroundColor="#C3FFFB"
               />
             </Grid>
             <Grid item xs={4}>
               <StatCard
-                value={120}
-                fieldName="Хамгийн бага WPM"
+                value={totalTime}
+                fieldName="Зарцуулсан хугацаа"
                 backgroundColor="#C8BAFF"
               />
             </Grid>
             <Grid item xs={4}>
               <StatCard
-                value={120}
+                value={highestWFM}
                 fieldName="Хамгийн өндөр WPM"
                 backgroundColor="#FFFCBB"
               />

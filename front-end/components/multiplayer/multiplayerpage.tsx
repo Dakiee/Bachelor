@@ -28,10 +28,11 @@ const rubik = Rubik({ subsets: ["latin"] });
 
 interface User {
   id: string;
+  roomId: string;
   data: {
     progress: number;
     wpm: number;
-    completion: number;
+    accuracy: number;
   };
 }
 
@@ -64,6 +65,7 @@ const MultiPlayerPage = (props: any) => {
 
   const socket = useSocket();
   const searchParams = useSearchParams();
+  const [roomId, setRoomId] = useState("");
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
@@ -75,11 +77,17 @@ const MultiPlayerPage = (props: any) => {
         socket!.emit("create-room", props.textData.content);
       }
 
-      socket!.on("update-room", (res) => {
-        const { users, textContent } = JSON.parse(res);
+      // socket!.on("start-game", (res) => {
+      //   if (res == "start") {
+      //     start();
+      //   }
+      // });
 
+      socket!.on("update-room", (res) => {
+        const { users, textContent, roomId } = JSON.parse(res);
         setUsers(users);
         setWords(textContent);
+        setRoomId(roomId);
       });
     }
   }, [socket]);
@@ -254,9 +262,10 @@ const MultiPlayerPage = (props: any) => {
     const userIndex = users.findIndex((user) => user.id === socket?.id);
 
     const user = users[userIndex];
+    user.roomId = roomId;
     user.data.progress = ((charIndex + char_correct) / words.length) * 100;
     user.data.wpm = Number(calculateWPM(time, userIndex).currentWPM);
-    user.data.completion = Number(calculateAccuracy(correct, wrong));
+    user.data.accuracy = Number(calculateAccuracy(correct, wrong));
 
     // switch index
     setCharIndex(charIndex + last_space);
@@ -270,6 +279,8 @@ const MultiPlayerPage = (props: any) => {
     if (charIndex + char_correct >= words.length) {
       setStatus("completed");
     }
+
+    socket!.emit("update-progress", user);
   };
 
   const handleRenderText = () => {
@@ -301,8 +312,8 @@ const MultiPlayerPage = (props: any) => {
     return res;
   };
 
-  const PlayContent = (props: any) => {
-    const { name, progress, wpm, completion, style } = props;
+  const ProgressBar = (props: any) => {
+    const { name, progress, wpm, accuracy, style } = props;
     return (
       <div className={`${style.playStatus} ${rubik.className}`}>
         <Typography
@@ -331,7 +342,7 @@ const MultiPlayerPage = (props: any) => {
             fontSize={18}
             className={style.playContentBodyText}
           >
-            {completion}%
+            {accuracy}%
           </Typography>
         </div>
       </div>
@@ -353,8 +364,6 @@ const MultiPlayerPage = (props: any) => {
     setShowModal(false);
     setFetchData(false);
   };
-
-  const showInviteModal = () => {};
 
   return (
     <>
@@ -384,9 +393,9 @@ const MultiPlayerPage = (props: any) => {
                 variant="body1"
                 color="red"
                 className={`${rubik.className} ${style.linkText}`}
-                onClick={showInviteModal}
+                // onClick={handleCopyClick}
               >
-                see URL
+                copy URL
               </Typography>
             </div>
 
@@ -409,12 +418,12 @@ const MultiPlayerPage = (props: any) => {
               </div>
 
               {users.map((user) => (
-                <PlayContent
+                <ProgressBar
                   key={user.id}
                   name="Dakie"
                   progress={user.data.progress}
                   wpm={user.data.wpm}
-                  completion={user.data.completion}
+                  accuracy={user.data.accuracy}
                   style={style}
                 />
               ))}

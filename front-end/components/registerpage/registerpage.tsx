@@ -7,8 +7,10 @@ import style from "./register.module.css";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { firebaseApp, auth } from "../../app/api/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../app/api/firebase";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["500"] });
 
@@ -27,8 +29,16 @@ const RegisterPage = () => {
 
     try {
       await createUserWithEmailAndPassword(auth, email, passwordOne);
-      console.log("User created");
-      router.push("/");
+      const password = passwordOne;
+
+      signIn("credentials", {
+        email,
+        password,
+        redirect: true,
+        callbackUrl: "/",
+      });
+
+      // router.push("/");
     } catch (error) {
       console.error(error);
     }
@@ -62,7 +72,7 @@ const RegisterPage = () => {
               color={"gray"}
               className={poppins.className}
             >
-              Welcome! Please enter your details.
+              Тавтай морил! Мэдээллээ оруулна уу.
             </Typography>
             <Grid
               container
@@ -79,10 +89,10 @@ const RegisterPage = () => {
                     fontWeight={"bold"}
                     fontSize={"16px"}
                   >
-                    Email
+                    Имэйл
                   </Typography>
                   <TextField
-                    label="Enter your email"
+                    label="Имэйлээ оруулна уу"
                     variant="outlined"
                     name="email"
                     onChange={(event) => setEmail(event.target.value)}
@@ -96,10 +106,10 @@ const RegisterPage = () => {
                     fontWeight={"bold"}
                     fontSize={"16px"}
                   >
-                    Password
+                    Нууц үг
                   </Typography>
                   <TextField
-                    label="Enter your password"
+                    label="Нууц үгээ оруулна уу"
                     type="password"
                     onChange={(event) => setPasswordOne(event.target.value)}
                     name="passwordOne"
@@ -114,10 +124,11 @@ const RegisterPage = () => {
                     fontWeight={"bold"}
                     fontSize={"16px"}
                   >
-                    Confirm Password
+                    Нууц үгээ баталгаажуулна уу
                   </Typography>
+
                   <TextField
-                    label="Confirm your password"
+                    label="Нууц үгээ батлах"
                     onChange={(event) => setPasswordTwo(event.target.value)}
                     name="passwordTwo"
                     type="password"
@@ -125,6 +136,18 @@ const RegisterPage = () => {
                     fullWidth
                     margin="normal"
                   />
+                  <Grid container alignItems="center">
+                    <Grid item xs={12} alignItems="right">
+                      <Button
+                        color="primary"
+                        size="small"
+                        className={poppins.className}
+                      >
+                        <Link href="/login">Таньд бүртгэл байгаа юу ??</Link>
+                      </Button>
+                    </Grid>
+                  </Grid>
+
                   <Button
                     variant="contained"
                     onClick={handleSignUp}
@@ -133,7 +156,7 @@ const RegisterPage = () => {
                     sx={{ borderRadius: "15px" }}
                     style={{ marginTop: "20px" }}
                   >
-                    Sign Up
+                    Бүртгүүлэх
                   </Button>
                   <Button
                     variant="outlined"

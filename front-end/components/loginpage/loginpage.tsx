@@ -14,6 +14,7 @@ import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Poppins } from "next/font/google";
+import Link from "next/link"
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["500"] });
 
@@ -113,7 +114,7 @@ const LogInPage = () => {
                       size="small"
                       className={poppins.className}
                     >
-                      Нууц үгээ мартсан
+                      <Link href="/register">Таньд бүртгэл байхгүй юу ??</Link>
                     </Button>
                   </Grid>
                 </Grid>

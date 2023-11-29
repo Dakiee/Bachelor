@@ -68,22 +68,6 @@ const roomUsers = {};
 io.on("connection", (socket) => {
   console.log("A user connected: " + socket.id);
 
-  // socket.on("create-room", (textContent) => {
-  //   const roomId = Math.random().toString(36).substring(2, 7);
-
-  //   socket.join(roomId);
-
-  //   roomUsers[roomId] = {
-  //     textContent: textContent,
-  //     users: [socket.id],
-  //   };
-  //   console.log(`User created and joined room ${roomId}`);
-
-  //   io.to(roomId).emit("room-created", roomId);
-
-  //   updateRoom(roomId);
-  // });
-
   socket.on("create-room", (textContent) => {
     const roomId = Math.random().toString(36).substring(2, 7);
 
@@ -91,12 +75,10 @@ io.on("connection", (socket) => {
 
     roomUsers[roomId] = {
       textContent: textContent,
-      users: [{ id: socket.id, data: { progress: 0, wpm: 0, completion: 0 } }],
+      users: [{ id: socket.id, data: { progress: 0, wpm: 0, accuracy: 0 } }],
     };
 
     console.log(`Хэрэглэгч өрөө үүсгэж, ${roomId} -д нэгдсэн`);
-
-    io.to(roomId).emit("room-created", roomId);
 
     updateRoom(roomId);
   });
@@ -112,10 +94,31 @@ io.on("connection", (socket) => {
 
     roomUsers[roomId].users.push({
       id: socket.id,
-      data: { progress: 0, wpm: 0, completion: 0 },
+      data: { progress: 0, wpm: 0, accuracy: 0 },
     });
 
+    // if (roomUsers[roomId].users.length == 2) {
+    //   const start = "start";
+    //   console.log("PEZDAA")
+    //   io.to(start).emit("start-game", start);
+    // }
+
     updateRoom(roomId);
+  });
+
+  socket.on("update-progress", (updatedUser) => {
+    const roomId = updatedUser.roomId;
+    const userId = updatedUser.id;
+
+    if (roomUsers[roomId]) {
+      const usersInRoom = roomUsers[roomId].users;
+      const userToUpdate = usersInRoom.find((user) => user.id === userId);
+
+      if (userToUpdate) {
+        userToUpdate.data = updatedUser.data;
+        updateRoom(roomId);
+      }
+    }
   });
 
   socket.on("disconnect", () => {
@@ -138,22 +141,6 @@ io.on("connection", (socket) => {
     });
   });
 
-  // function updateRoom(roomId) {
-  //   if (roomUsers[roomId]) {
-  //     const usersInRoom = roomUsers[roomId].users;
-
-  //     usersInRoom.forEach((userId) => {
-  //       io.to(userId).emit(
-  //         "update-room",
-  //         JSON.stringify({
-  //           users: usersInRoom,
-  //           textContent: roomUsers[roomId].textContent,
-  //         })
-  //       );
-  //     });
-  //   }
-  // }
-
   function updateRoom(roomId) {
     if (roomUsers[roomId]) {
       const usersInRoom = roomUsers[roomId].users;
@@ -164,6 +151,7 @@ io.on("connection", (socket) => {
           JSON.stringify({
             users: usersInRoom.map((u) => ({ id: u.id, data: u.data })),
             textContent: roomUsers[roomId].textContent,
+            roomId: roomId,
           })
         );
       });

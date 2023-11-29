@@ -76,12 +76,12 @@ const MultiPlayerPage = (props: any) => {
       } else {
         socket!.emit("create-room", props.textData.content);
       }
-
-      // socket!.on("start-game", (res) => {
-      //   if (res == "start") {
-      //     start();
-      //   }
-      // });
+      socket.on("room-checker", (checker) => {
+        if (checker === 1) {
+          setFetchData(true);
+          start();
+        }
+      });
 
       socket!.on("update-room", (res) => {
         const { users, textContent, roomId } = JSON.parse(res);
@@ -393,87 +393,112 @@ const MultiPlayerPage = (props: any) => {
         accuracy={calculateAccuracy(correct, wrong)}
         failed={failed}
       />
-      <div className={`${style.container} ${rubik.className}`}>
-        <Container>
-          <Card className={style.cardBody}>
-            <div className={style.topText}>
-              <Typography
-                variant="body1"
-                fontSize={24}
-                className={`${rubik.className} ${style.playHeaderText}`}
-              >
-                Уралдаан үргэлжилж байна:
-                {time < TIME_LIMIT ? ` ${TIME_LIMIT - time} секунд` : "Дууслаа"}
-              </Typography>
-              <Typography
-                variant="body1"
-                color="red"
-                className={`${rubik.className} ${style.linkText}`}
-                onClick={() => handleCopyClick(roomId)}
-              >
-                copy URL
-              </Typography>
-            </div>
-
-            <div className={style.playContent}>
-              <div className={style.playContentHeader}>
-                <Typography
-                  variant="body1"
-                  fontSize={18}
-                  className={style.playContentHeaderText}
-                >
-                  Хурд
-                </Typography>
-                <Typography
-                  variant="body1"
-                  fontSize={18}
-                  className={style.playContentHeaderText}
-                >
-                  Нарийвчлал
-                </Typography>
+      {status === "idle" ? (
+        <div className={`${style.container} ${rubik.className}`}>
+          <Container>
+            <Card className={style.loadBody}>
+              <div className={`${style.container} ${rubik.className}`}>
+                <div className={style.renderTest}>
+                  <Image
+                    src={fetchData ? "/assets/loading.gif" : "/assets/idle.gif"}
+                    width={450}
+                    height={400}
+                    alt="icon"
+                  />
+                  {fetchData
+                    ? `Тест эхлэхэд ${startCountDown}...`
+                    : "Хүн орж ирэхийг хүлээж байна"}
+                    
+                  <Typography
+                    variant="body1"
+                    color="red"
+                    className={`${rubik.className} ${style.linkText}`}
+                    onClick={() => handleCopyClick(roomId)}
+                  >
+                    copy URL
+                  </Typography>
+                </div>
               </div>
-
-              {users.map((user) => (
-                <ProgressBar
-                  key={user.id}
-                  name="Dakie"
-                  progress={user.data.progress}
-                  wpm={user.data.wpm}
-                  accuracy={user.data.accuracy}
-                  style={style}
-                />
-              ))}
-
-              <div className={style.typingTextContainer}>
+            </Card>
+          </Container>
+        </div>
+      ) : (
+        <div className={`${style.container} ${rubik.className}`}>
+          <Container>
+            <Card className={style.cardBody}>
+              <div className={style.topText}>
                 <Typography
                   variant="body1"
-                  className={style.typingText}
-                  fontSize={20}
+                  fontSize={24}
+                  className={`${rubik.className} ${style.playHeaderText}`}
                 >
-                  {handleRenderText()}
+                  Уралдаан үргэлжилж байна:
+                  {time < TIME_LIMIT
+                    ? ` ${TIME_LIMIT - time} секунд`
+                    : "Дууслаа"}
                 </Typography>
               </div>
 
-              <div>
-                <TextField
-                  id=""
-                  value={input}
-                  className={`${style.typingField} ${rubik.className}`}
-                  onChange={handleInput}
-                  ref={inputRef}
-                />
-              </div>
+              <div className={style.playContent}>
+                <div className={style.playContentHeader}>
+                  <Typography
+                    variant="body1"
+                    fontSize={18}
+                    className={style.playContentHeaderText}
+                  >
+                    Хурд
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    fontSize={18}
+                    className={style.playContentHeaderText}
+                  >
+                    Нарийвчлал
+                  </Typography>
+                </div>
 
-              <Button
-                variant="text"
-                className={`${rubik.className} ${style.leaveBtn}`}
-              >
-                <Link href="/">уралдааныг орхи</Link>
-              </Button>
-            </div>
-          </Card>
-        </Container>
-      </div>
+                {users.map((user) => (
+                  <ProgressBar
+                    key={user.id}
+                    name="Dakie"
+                    progress={user.data.progress}
+                    wpm={user.data.wpm}
+                    accuracy={user.data.accuracy}
+                    style={style}
+                  />
+                ))}
+
+                <div className={style.typingTextContainer}>
+                  <Typography
+                    variant="body1"
+                    className={style.typingText}
+                    fontSize={20}
+                  >
+                    {handleRenderText()}
+                  </Typography>
+                </div>
+
+                <div>
+                  <TextField
+                    id=""
+                    value={input}
+                    className={`${style.typingField} ${rubik.className}`}
+                    onChange={handleInput}
+                    ref={inputRef}
+                  />
+                </div>
+
+                <Button
+                  variant="text"
+                  className={`${rubik.className} ${style.leaveBtn}`}
+                >
+                  <Link href="/">уралдааныг орхи</Link>
+                </Button>
+              </div>
+            </Card>
+          </Container>
+        </div>
+      )}
     </>
   );
 };

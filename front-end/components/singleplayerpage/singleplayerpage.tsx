@@ -25,7 +25,7 @@ import ResultModal from "./resultmodal";
 const rubik = Rubik({ subsets: ["latin"] });
 
 const SinglePlayerPage = () => {
-  const TIME_LIMIT = 20;
+  const TIME_LIMIT = 90;
   const MAX_LENGTH = 32;
 
   const [input, setInput] = useState("");
@@ -103,15 +103,21 @@ const SinglePlayerPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const text = await fetch("https://typeracer-ytd7.onrender.com/api/race_text", {
-          cache: "no-cache",
-        });
+        const text = await fetch(
+          "https://typeracer-ytd7.onrender.com/api/race_text",
+          {
+            cache: "no-cache",
+          }
+        );
         const textData = await text.json();
         setWords(textData.content);
 
-        const raceResponse = await fetch("https://typeracer-ytd7.onrender.com/api/race", {
-          cache: "no-cache",
-        });
+        const raceResponse = await fetch(
+          "https://typeracer-ytd7.onrender.com/api/race",
+          {
+            cache: "no-cache",
+          }
+        );
         const raceId = await raceResponse.json();
         setRaceId(raceId);
 

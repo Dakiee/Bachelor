@@ -3,17 +3,23 @@ import Navbar from "@/components/navbar/navbar";
 import Footer from "@/components/footer/footer";
 import MultiPlayerPage from "@/components/multiplayer/multiplayerpage";
 import { SocketProvider } from "./SocketProvider";
-import { Socket } from "socket.io-client";
+import { Box } from "@mui/material";
 
 const Play = async () => {
-  const text = await fetch("https://typeracer-ytd7.onrender.com/api/race_text", {
-    cache: "no-cache",
-  });
+  const text = await fetch(
+    "https://typeracer-ytd7.onrender.com/api/race_text",
+    {
+      cache: "no-cache",
+    }
+  );
   const textData = await text.json();
 
-  const raceResponse = await fetch("https://typeracer-ytd7.onrender.com/api/race", {
-    cache: "no-cache",
-  });
+  const raceResponse = await fetch(
+    "https://typeracer-ytd7.onrender.com/api/race",
+    {
+      cache: "no-cache",
+    }
+  );
   const raceId = await raceResponse.json();
 
   const userStatisticsResponse = await fetch(
@@ -23,7 +29,12 @@ const Play = async () => {
   const userStatisticsId = await userStatisticsResponse.json();
 
   return (
-    <div>
+    <Box
+      height={"100vh"}
+      display={"flex"}
+      flexDirection={"column"}
+      justifyContent={"space-between"}
+    >
       <Navbar></Navbar>
       <SocketProvider>
         <MultiPlayerPage
@@ -33,7 +44,7 @@ const Play = async () => {
         />
       </SocketProvider>
       <Footer></Footer>
-    </div>
+    </Box>
   );
 };
 

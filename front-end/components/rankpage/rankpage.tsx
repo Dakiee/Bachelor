@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 import style from "./rank.module.css";
@@ -13,14 +15,80 @@ const roboto1 = Roboto_Slab({ subsets: ["latin"], weight: ["400"] });
 const rubik = Rubik({ subsets: ["latin"] });
 
 const RankContent = () => {
-  const data = [
-    { name: "Dakie", date: "2023-11-07", wpm: 120 },
-    { name: "Bald", date: "2023-11-07", wpm: 80 },
-    { name: "Blgn", date: "2023-11-07", wpm: 70 },
-    { name: "Dalai", date: "2023-11-07", wpm: 120 },
-    { name: "Boldoo", date: "2023-11-07", wpm: 80 },
-    { name: "Tsedo", date: "2023-11-07", wpm: 70 },
-  ];
+  const [data, setOrderedData] = useState([]);
+  const [filter, setFilter] = useState("week");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const responseData = await fetch(
+          "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/user_statistics.json"
+        );
+        const data = await responseData.json();
+
+        if (data.length === 0) {
+          return null;
+        }
+
+        const orderedData = data.sort(
+          (a: any, b: any) => parseInt(b.avg_wfm) - parseInt(a.avg_wfm)
+        );
+
+        const modifiedData = orderedData.map((item: any) => {
+          return {
+            ...item,
+            user_email: item.user_email.split("@")[0],
+            updated_at: new Date(item.updated_at).toLocaleDateString("en-US", {
+              weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            }),
+          };
+        });
+
+        setOrderedData(modifiedData);
+      } catch (error) {
+        console.error("Error fetching user statistics:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const filterData = (filter: any) => {
+    const currentDate: any = new Date();
+    let filteredData = [];
+
+    switch (filter) {
+      case "week":
+        filteredData = data.filter((item: any) => {
+          const itemDate = new Date(item.updated_at);
+          return itemDate >= new Date(currentDate - 7 * 24 * 60 * 60 * 1000);
+        });
+        break;
+
+      case "month":
+        filteredData = data.filter((item: any) => {
+          const itemDate = new Date(item.updated_at);
+          return itemDate.getMonth() === currentDate.getMonth();
+        });
+        break;
+
+      case "year":
+        filteredData = data.filter((item: any) => {
+          const itemDate = new Date(item.updated_at);
+          return itemDate.getFullYear() === currentDate.getFullYear();
+        });
+        break;
+
+      default:
+        filteredData = data;
+        break;
+    }
+
+    setOrderedData(filteredData);
+  };
 
   const getRandomColor = () => {
     const red = Math.floor(Math.random() * 256);
@@ -56,20 +124,32 @@ const RankContent = () => {
             <Button
               variant="text"
               className={`${rubik.className} ${style.filterBtn}`}
+              onClick={() => {
+                setFilter("week");
+                filterData("week");
+              }}
             >
-              7 хоног
+              week
             </Button>
             <Button
               variant="text"
               className={`${rubik.className} ${style.filterBtn}`}
+              onClick={() => {
+                setFilter("month");
+                filterData("month");
+              }}
             >
-              сар
+              month
             </Button>
             <Button
               variant="text"
               className={`${rubik.className} ${style.filterBtn}`}
+              onClick={() => {
+                setFilter("year");
+                filterData("year");
+              }}
             >
-              жил
+              year
             </Button>
           </div>
           <div>
@@ -110,7 +190,7 @@ const RankContent = () => {
                   Хамгийн их WPM
                 </Typography>
               </Grid>
-              {data.map((entry, index) => {
+              {data.map((entry: any, index) => {
                 return (
                   <>
                     <Grid
@@ -137,7 +217,7 @@ const RankContent = () => {
                       className={style.tableCellText}
                       borderBottom={"1px solid black"}
                     >
-                      {entry.name}
+                      {entry.user_email}
                     </Grid>
                     <Grid
                       item
@@ -147,7 +227,7 @@ const RankContent = () => {
                       className={style.tableCellDate}
                       borderBottom={"1px solid black"}
                     >
-                      {entry.date}
+                      {entry.updated_at}
                     </Grid>
                     <Grid
                       item
@@ -157,7 +237,7 @@ const RankContent = () => {
                       className={style.tableCellText}
                       borderBottom={"1px solid black"}
                     >
-                      {entry.wpm}
+                      {entry.highest_wpm}
                     </Grid>
                   </>
                 );

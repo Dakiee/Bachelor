@@ -97,13 +97,12 @@ io.on("connection", (socket) => {
       data: { progress: 0, wpm: 0, accuracy: 0 },
     });
 
-    // if (roomUsers[roomId].users.length == 2) {
-    //   const start = "start";
-    //   console.log("PEZDAA")
-    //   io.to(start).emit("start-game", start);
-    // }
-
     updateRoom(roomId);
+
+  if (roomUsers[roomId].users.length === 2) {
+    let checker = 1;
+    io.to(roomId).emit("room-checker", checker);
+  }
   });
 
   socket.on("update-progress", (updatedUser) => {
@@ -122,21 +121,17 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("User disconnected");
+    console.log("Хэрэглэгчийг салсан");
 
-    Object.keys(roomUsers).forEach((room) => {
-      roomUsers[room].users = roomUsers[room].users.filter(
-        (user) => user !== socket.id
-      );
-      console.log(
-        `Users in room ${room} after disconnect:`,
-        roomUsers[room].users
-      );
+    Object.keys(roomUsers).forEach((roomId) => {
+      const room = roomUsers[roomId];
 
-      if (roomUsers[room].users.length === 0) {
-        delete roomUsers[room];
+      room.users = room.users.filter((user) => user.id !== socket.id);
+
+      if (room.users.length === 0) {
+        delete roomUsers[roomId];
       } else {
-        updateRoom(room);
+        updateRoom(roomId);
       }
     });
   });

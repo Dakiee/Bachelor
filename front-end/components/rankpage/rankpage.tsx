@@ -129,7 +129,7 @@ const RankContent = () => {
                 filterData("week");
               }}
             >
-              week
+              7 хоног
             </Button>
             <Button
               variant="text"
@@ -139,7 +139,7 @@ const RankContent = () => {
                 filterData("month");
               }}
             >
-              month
+              сар
             </Button>
             <Button
               variant="text"
@@ -149,7 +149,7 @@ const RankContent = () => {
                 filterData("year");
               }}
             >
-              year
+              жил
             </Button>
           </div>
           <div>

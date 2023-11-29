@@ -478,7 +478,7 @@ const MultiPlayerPage = (props: any) => {
                 {users.map((user, index) => (
                   <ProgressBar
                     key={user.id}
-                    name={`user ${index + 1}`}
+                    name={`Racer ${index + 1}`}
                     progress={user.data.progress}
                     wpm={user.data.wpm}
                     accuracy={user.data.accuracy}

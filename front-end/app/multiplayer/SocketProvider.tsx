@@ -14,7 +14,7 @@ export const SocketProvider = ({ children }: any) => {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const newSocket = io("http://localhost:3030");
+    const newSocket = io("https://typeracer-ytd7.onrender.com");
 
     setSocket(newSocket);
 

@@ -6,18 +6,18 @@ import { SocketProvider } from "./SocketProvider";
 import { Socket } from "socket.io-client";
 
 const Play = async () => {
-  const text = await fetch("http://localhost:3030/api/race_text", {
+  const text = await fetch("https://typeracer-ytd7.onrender.com/api/race_text", {
     cache: "no-cache",
   });
   const textData = await text.json();
 
-  const raceResponse = await fetch("http://localhost:3030/api/race", {
+  const raceResponse = await fetch("https://typeracer-ytd7.onrender.com/api/race", {
     cache: "no-cache",
   });
   const raceId = await raceResponse.json();
 
   const userStatisticsResponse = await fetch(
-    "http://localhost:3030/api/user_statistics",
+    "https://typeracer-ytd7.onrender.com/api/user_statistics",
     { cache: "no-cache" }
   );
   const userStatisticsId = await userStatisticsResponse.json();

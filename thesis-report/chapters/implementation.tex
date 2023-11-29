@@ -92,7 +92,7 @@ Next.js дээр файлын бүтцээ Зураг 4.1 дээр харагд�
 
 \begin{lstlisting}[language=Javascript, caption=Хэрэглэгч өрөөнд нэвтрэх client талын код, frame=single]
 	useEffect(() => {
-    const socket = io("http://localhost:3030");
+    const socket = io("https://typeracer-ytd7.onrender.com");
     setSocket(socket);
     const setupSocket = () => {
       if (searchParams!.get("roomId")) {

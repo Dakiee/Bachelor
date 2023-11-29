@@ -21,30 +21,40 @@ import { ref, set } from "firebase/database";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import ResultModal from "./resultmodal";
-import { Socket, io } from "socket.io-client";
-import { useSearchParams } from "next/navigation";
+import { useSocket } from "@/app/multiplayer/SocketProvider";
+import { useSearchParams } from "next/dist/client/components/navigation";
 
 const rubik = Rubik({ subsets: ["latin"] });
 
-const MultiPlayerPage = () => {
+interface User {
+  id: string;
+  data: {
+    progress: number;
+    wpm: number;
+    completion: number;
+  };
+}
+
+const MultiPlayerPage = (props: any) => {
+  const textId = props.textData.id;
+  const quote = props.textData.content;
+  const raceId = props.raceId;
+  const userId = props.userStatisticsId;
+
   const TIME_LIMIT = 90;
   const MAX_LENGTH = 32;
 
   const [input, setInput] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const [status, setStatus] = useState("idle");
   const [startCountDown, setStartCountDown] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const [time, setTime] = useState(0);
   const [fetchData, setFetchData] = useState(false);
 
+  const [time, setTime] = useState(0);
+  const [progress, setProgress] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
+  const [status, setStatus] = useState("idle");
   const [wordIndex, setWordIndex] = useState(0);
   const [charStatus, setCharStatus] = useState<any[]>([]);
-  const [textId, setTextId] = useState(0);
-  const [wordId, setWordId] = useState(0);
-  const [raceId, setRaceId] = useState(0);
-  const [userId, setUserId] = useState(0);
   const [words, setWords] = useState("");
   const [correct, setCorrect] = useState(0);
   const [wrong, setWrong] = useState(0);
@@ -52,10 +62,27 @@ const MultiPlayerPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [failed, setFailed] = useState(false);
 
-  //socket
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const socket = useSocket();
   const searchParams = useSearchParams();
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    if (socket) {
+      if (searchParams!.get("roomId")) {
+        const roomId = searchParams!.get("roomId");
+        socket!.emit("join-room", roomId);
+      } else {
+        socket!.emit("create-room", props.textData.content);
+      }
+
+      socket!.on("update-room", (res) => {
+        const { users, textContent } = JSON.parse(res);
+
+        setUsers(users);
+        setWords(textContent);
+      });
+    }
+  }, [socket]);
 
   const session = useSession({
     required: true,
@@ -64,72 +91,12 @@ const MultiPlayerPage = () => {
     },
   });
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const race_text = await fetch(
-  //         "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/race_text.json"
-  //       );
-
-  //       const race = await fetch(
-  //         "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/race.json"
-  //       );
-
-  //       const user_statistics = await fetch(
-  //         "https://typeracer-1be53-default-rtdb.asia-southeast1.firebasedatabase.app/user_statistics.json"
-  //       );
-
-  //       if (race_text.ok) {
-  //         const data = await race_text.json();
-  //         const id = Math.floor(Math.random() * data.length);
-  //         const quote = data[id];
-
-  //         setTextId(id);
-  //         setWords(quote.content);
-  //       } else {
-  //         console.error(
-  //           `Error: Unable to fetch data. Status Code: ${race_text.status}`
-  //         );
-  //       }
-  //       if (race.ok) {
-  //         const race_data = await race.json();
-  //         const raceId = race_data.length;
-  //         setRaceId(raceId);
-  //       }
-  //       if (user_statistics.ok) {
-  //         const user_data = await user_statistics.json();
-  //         const userId = user_data.length;
-  //         setUserId(userId);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const text = await fetch("http://localhost:3030/api/race_text");
-        const textData = await text.json();
-        setWords(textData.content);
+    setWords(quote);
 
-        const raceResponse = await fetch("http://localhost:3030/api/race");
-        const raceId = await raceResponse.json();
-        setRaceId(raceId);
-
-        const userStatisticsResponse = await fetch(
-          "http://localhost:3030/api/user_statistics"
-        );
-        const userStatisticsId = await userStatisticsResponse.json();
-        setUserId(userStatisticsId);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    // return () => {
+    //   socket!.disconnect();
+    // };
   }, []);
 
   useEffect(() => {
@@ -284,8 +251,15 @@ const MultiPlayerPage = () => {
     currStatus.fill(-1, charIndex + currString.length, charIndex + MAX_LENGTH);
 
     // progress
-    setProgress(((charIndex + char_correct) / words.length) * 100);
-    setCharIndex(charIndex + last_space); // switch index
+    const userIndex = users.findIndex((user) => user.id === socket?.id);
+
+    const user = users[userIndex];
+    user.data.progress = ((charIndex + char_correct) / words.length) * 100;
+    user.data.wpm = Number(calculateWPM(time, userIndex).currentWPM);
+    user.data.completion = Number(calculateAccuracy(correct, wrong));
+
+    // switch index
+    setCharIndex(charIndex + last_space);
     setWordIndex(wordIndex + word_correct);
     setCharStatus(currStatus);
 
@@ -301,6 +275,7 @@ const MultiPlayerPage = () => {
   const handleRenderText = () => {
     let index = 0;
     const curr_words = words.split(" ");
+
     const res = curr_words.map((word, word_index) => {
       const letters = word.split("");
       const results = letters.map((char) => {
@@ -379,31 +354,6 @@ const MultiPlayerPage = () => {
     setFetchData(false);
   };
 
-  useEffect(() => {
-    const socket = io("http://localhost:3030");
-    setSocket(socket);
-
-    const setupSocket = () => {
-      if (searchParams!.get("roomId")) {
-        const roomId = searchParams!.get("roomId");
-        socket!.emit("join-room", roomId);
-      } else {
-        socket!.emit("create-room", words);
-      }
-
-      socket.on("update-room", ({ users, text }) => {
-        setUsers(users);
-        // setWords(text);
-      });
-
-      return () => {
-        socket!.disconnect();
-      };
-    };
-
-    setupSocket();
-  }, [textId]);
-
   const showInviteModal = () => {};
 
   return (
@@ -458,16 +408,17 @@ const MultiPlayerPage = () => {
                 </Typography>
               </div>
 
-              {users.map((userId) => (
+              {users.map((user) => (
                 <PlayContent
-                  key={userId}
+                  key={user.id}
                   name="Dakie"
-                  progress={progress}
-                  wpm={calculateWPM(time, wordIndex).currentWPM}
-                  completion={calculateAccuracy(correct, wrong)}
+                  progress={user.data.progress}
+                  wpm={user.data.wpm}
+                  completion={user.data.completion}
                   style={style}
                 />
               ))}
+
               <div className={style.typingTextContainer}>
                 <Typography
                   variant="body1"

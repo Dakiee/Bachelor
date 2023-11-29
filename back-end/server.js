@@ -24,6 +24,7 @@ app.get("/api/race_text", async (req, res) => {
 
     const raceText = await raceTextData.json();
     const textId = Math.floor(Math.random() * raceText.length);
+
     const quote = raceText[textId];
 
     res.json(quote);
@@ -67,16 +68,33 @@ const roomUsers = {};
 io.on("connection", (socket) => {
   console.log("A user connected: " + socket.id);
 
-  socket.on("create-room", (textId) => {
+  // socket.on("create-room", (textContent) => {
+  //   const roomId = Math.random().toString(36).substring(2, 7);
+
+  //   socket.join(roomId);
+
+  //   roomUsers[roomId] = {
+  //     textContent: textContent,
+  //     users: [socket.id],
+  //   };
+  //   console.log(`User created and joined room ${roomId}`);
+
+  //   io.to(roomId).emit("room-created", roomId);
+
+  //   updateRoom(roomId);
+  // });
+
+  socket.on("create-room", (textContent) => {
     const roomId = Math.random().toString(36).substring(2, 7);
 
     socket.join(roomId);
 
     roomUsers[roomId] = {
-      textId: textId,
-      users: [socket.id],
+      textContent: textContent,
+      users: [{ id: socket.id, data: { progress: 0, wpm: 0, completion: 0 } }],
     };
-    console.log(`User created and joined room ${roomId}`);
+
+    console.log(`Хэрэглэгч өрөө үүсгэж, ${roomId} -д нэгдсэн`);
 
     io.to(roomId).emit("room-created", roomId);
 
@@ -87,11 +105,15 @@ io.on("connection", (socket) => {
     socket.join(roomId);
     console.log(roomUsers);
 
-    if (!roomUsers[roomId]) {
-      roomUsers[roomId] = { textId: 0, users: [] };
+    if (roomUsers[roomId] == undefined) {
+      console.log(roomUsers[roomId]);
+      roomUsers[roomId] = { textContent: "Хоосон өрөө", users: [] };
     }
 
-    roomUsers[roomId].users.push(socket.id);
+    roomUsers[roomId].users.push({
+      id: socket.id,
+      data: { progress: 0, wpm: 0, completion: 0 },
+    });
 
     updateRoom(roomId);
   });
@@ -110,21 +132,40 @@ io.on("connection", (socket) => {
 
       if (roomUsers[room].users.length === 0) {
         delete roomUsers[room];
+      } else {
+        updateRoom(room);
       }
-
-      updateRoom(room);
     });
   });
+
+  // function updateRoom(roomId) {
+  //   if (roomUsers[roomId]) {
+  //     const usersInRoom = roomUsers[roomId].users;
+
+  //     usersInRoom.forEach((userId) => {
+  //       io.to(userId).emit(
+  //         "update-room",
+  //         JSON.stringify({
+  //           users: usersInRoom,
+  //           textContent: roomUsers[roomId].textContent,
+  //         })
+  //       );
+  //     });
+  //   }
+  // }
 
   function updateRoom(roomId) {
     if (roomUsers[roomId]) {
       const usersInRoom = roomUsers[roomId].users;
 
-      usersInRoom.forEach((userId) => {
-        io.to(userId).emit("update-room", {
-          users: usersInRoom,
-          textId: roomUsers[roomId].textId,
-        });
+      usersInRoom.forEach((user) => {
+        io.to(user.id).emit(
+          "update-room",
+          JSON.stringify({
+            users: usersInRoom.map((u) => ({ id: u.id, data: u.data })),
+            textContent: roomUsers[roomId].textContent,
+          })
+        );
       });
     }
   }

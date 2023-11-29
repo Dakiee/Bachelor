@@ -475,10 +475,10 @@ const MultiPlayerPage = (props: any) => {
                   </Typography>
                 </div>
 
-                {users.map((user) => (
+                {users.map((user, index) => (
                   <ProgressBar
                     key={user.id}
-                    name={getRandomAnimalName()}
+                    name={`user ${index + 1}`}
                     progress={user.data.progress}
                     wpm={user.data.wpm}
                     accuracy={user.data.accuracy}

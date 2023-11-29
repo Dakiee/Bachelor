@@ -35,6 +35,7 @@ const SinglePlayerPage = () => {
   const [progress, setProgress] = useState(0);
   const [time, setTime] = useState(0);
   const [fetchData, setFetchData] = useState(false);
+  const [userName, setName] = useState("");
 
   const [charIndex, setCharIndex] = useState(0);
   const [wordIndex, setWordIndex] = useState(0);
@@ -213,6 +214,23 @@ const SinglePlayerPage = () => {
 
     return () => clearInterval(timeLimit);
   }, [status]);
+
+  useEffect(() => {
+    const originalName = session?.data?.user?.email;
+
+    if (originalName) {
+      const atIndex = originalName.indexOf("@");
+
+      if (atIndex !== -1) {
+        const modifiedName = originalName.substring(0, atIndex);
+        setName(modifiedName);
+      } else {
+        console.log("Invalid name format");
+      }
+    } else {
+      console.log("User name not available");
+    }
+  }, [session?.data?.user?.email]);
 
   const resetGame = () => {
     setCharStatus(new Array(words.length).fill(-1));
@@ -463,7 +481,7 @@ const SinglePlayerPage = () => {
                 </div>
 
                 <PlayContent
-                  name="Dakie"
+                  name={userName}
                   progress={progress}
                   wpm={calculateWPM(time, wordIndex).currentWPM}
                   completion={calculateAccuracy(correct, wrong)}

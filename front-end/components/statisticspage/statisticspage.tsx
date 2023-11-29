@@ -84,7 +84,6 @@ const StatisticsPage = () => {
         setTestCount(totalData);
         setTotalTime(total_time);
         setAverageAccuracy(averageAccuracy);
-
       } catch (error) {
         console.error("Error fetching user statistics:", error);
       }

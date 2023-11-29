@@ -92,12 +92,12 @@ const MultiPlayerPage = (props: any) => {
     }
   }, [socket]);
 
-  const session = useSession({
-    required: true,
-    onUnauthenticated() {
-      redirect("/login");
-    },
-  });
+  // const session = useSession({
+  //   required: true,
+  //   onUnauthenticated() {
+  //     redirect("/login");
+  //   },
+  // });
 
   useEffect(() => {
     setWords(quote);
@@ -136,45 +136,45 @@ const MultiPlayerPage = (props: any) => {
       setFailed(false);
       setShowModal(true);
 
-      set(ref(db, "race/" + raceId), {
-        creator_id: session?.data?.user?.email,
-        race_type_id: 1,
-        text_id: textId,
-        created_at: Date.now(),
-        updated_at: Date.now(),
-      });
+      // set(ref(db, "race/" + raceId), {
+      //   creator_id: session?.data?.user?.email,
+      //   race_type_id: 2,
+      //   text_id: textId,
+      //   created_at: Date.now(),
+      //   updated_at: Date.now(),
+      // });
 
-      set(ref(db, "user_statistics/" + userId), {
-        user_id: session?.data?.user?.email,
-        avg_wfm: calculateWPM(time, wordIndex).currentWPM,
-        avg_accuracy: calculateAccuracy(correct, wrong),
-        highest_wpm: calculateWPM(time, wordIndex).highestWPM,
-        lowest_wpm: calculateWPM(time, wordIndex).lowestWPM,
-        created_at: Date.now(),
-        updated_at: Date.now(),
-      });
+      // set(ref(db, "user_statistics/" + userId), {
+      //   user_id: session?.data?.user?.email,
+      //   avg_wfm: calculateWPM(time, wordIndex).currentWPM,
+      //   avg_accuracy: calculateAccuracy(correct, wrong),
+      //   highest_wpm: calculateWPM(time, wordIndex).highestWPM,
+      //   lowest_wpm: calculateWPM(time, wordIndex).lowestWPM,
+      //   created_at: Date.now(),
+      //   updated_at: Date.now(),
+      // });
     } else if (status === "finished") {
       clearInterval(timeLimit);
       setFailed(true);
       setShowModal(true);
 
-      set(ref(db, "race/" + raceId), {
-        creator_id: session?.data?.user?.email,
-        race_type_id: 1,
-        text_id: textId,
-        created_at: Date.now(),
-        updated_at: Date.now(),
-      });
+      // set(ref(db, "race/" + raceId), {
+      //   creator_id: session?.data?.user?.email,
+      //   race_type_id: 2,
+      //   text_id: textId,
+      //   created_at: Date.now(),
+      //   updated_at: Date.now(),
+      // });
 
-      set(ref(db, "user_statistics/" + userId), {
-        user_id: session?.data?.user?.email,
-        avg_wfm: calculateWPM(time, wordIndex).currentWPM,
-        avg_accuracy: calculateAccuracy(correct, wrong),
-        highest_wpm: calculateWPM(time, wordIndex).highestWPM,
-        lowest_wpm: calculateWPM(time, wordIndex).lowestWPM,
-        created_at: Date.now(),
-        updated_at: Date.now(),
-      });
+      // set(ref(db, "user_statistics/" + userId), {
+      //   user_id: session?.data?.user?.email,
+      //   avg_wfm: calculateWPM(time, wordIndex).currentWPM,
+      //   avg_accuracy: calculateAccuracy(correct, wrong),
+      //   highest_wpm: calculateWPM(time, wordIndex).highestWPM,
+      //   lowest_wpm: calculateWPM(time, wordIndex).lowestWPM,
+      //   created_at: Date.now(),
+      //   updated_at: Date.now(),
+      // });
     }
 
     return () => clearInterval(timeLimit);
@@ -365,6 +365,22 @@ const MultiPlayerPage = (props: any) => {
     setFetchData(false);
   };
 
+  const handleCopyClick = (props: any) => {
+    navigator.clipboard
+      .writeText(
+        `https://duckracer-git-main-dakiee.vercel.app/multiplayer?roomId=${props}`
+      )
+      .then(function () {
+        alert(
+          "Text copied: " +
+            `https://duckracer-git-main-dakiee.vercel.app/multiplayer?roomId=${props}`
+        );
+      })
+      .catch(function (err) {
+        console.error("Unable to copy text to clipboard", err);
+      });
+  };
+
   return (
     <>
       <ResultModal
@@ -393,7 +409,7 @@ const MultiPlayerPage = (props: any) => {
                 variant="body1"
                 color="red"
                 className={`${rubik.className} ${style.linkText}`}
-                // onClick={handleCopyClick}
+                onClick={() => handleCopyClick(roomId)}
               >
                 copy URL
               </Typography>

@@ -68,6 +68,24 @@ const MultiPlayerPage = (props: any) => {
   const [roomId, setRoomId] = useState("");
   const [users, setUsers] = useState<User[]>([]);
 
+  const animalNames = [
+    "Lion",
+    "Elephant",
+    "Giraffe",
+    "Penguin",
+    "Kangaroo",
+    "Tiger",
+    "Cheetah",
+    "Dolphin",
+    "Koala",
+    "Panda",
+  ];
+
+  function getRandomAnimalName() {
+    const randomIndex = Math.floor(Math.random() * animalNames.length);
+    return animalNames[randomIndex];
+  }
+
   useEffect(() => {
     if (socket) {
       if (searchParams!.get("roomId")) {
@@ -408,7 +426,7 @@ const MultiPlayerPage = (props: any) => {
                   {fetchData
                     ? `Тест эхлэхэд ${startCountDown}...`
                     : "Хүн орж ирэхийг хүлээж байна"}
-                    
+
                   <Typography
                     variant="body1"
                     color="red"
@@ -460,7 +478,7 @@ const MultiPlayerPage = (props: any) => {
                 {users.map((user) => (
                   <ProgressBar
                     key={user.id}
-                    name="Dakie"
+                    name={getRandomAnimalName()}
                     progress={user.data.progress}
                     wpm={user.data.wpm}
                     accuracy={user.data.accuracy}

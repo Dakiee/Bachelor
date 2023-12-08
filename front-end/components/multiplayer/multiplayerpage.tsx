@@ -339,7 +339,7 @@ const MultiPlayerPage = (props: any) => {
           fontSize={18}
           className={style.playStatusName}
         >
-          {name}
+          {name} 
         </Typography>
         <div className={style.progress_bar}>
           <div

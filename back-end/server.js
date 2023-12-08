@@ -113,6 +113,8 @@ io.on("connection", (socket) => {
       const usersInRoom = roomUsers[roomId].users;
       const userToUpdate = usersInRoom.find((user) => user.id === userId);
 
+      console.log(updatedUser);
+
       if (userToUpdate) {
         userToUpdate.data = updatedUser.data;
         updateRoom(roomId);
@@ -121,7 +123,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("Хэрэглэгчийг салсан");
+    console.log("Хэрэглэгч салсан");
 
     Object.keys(roomUsers).forEach((roomId) => {
       const room = roomUsers[roomId];

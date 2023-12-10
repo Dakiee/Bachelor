@@ -1,5 +1,7 @@
 \chapter{Системийн архитектур, зохиомж}
 
+Уг бүлэгт системийн ерөнхий архитектур, зохиомжийг хамгийн ашигтай, хурдан ажиллах хэрэгтэй тул үүн дээрээ үндэслэн хэрэгжүүлэлт хийж үр дүнг харуулав.
+
 \section{Системийн архитектур}
 
 Cистемийн архитектур нь дараах хүчин зүйлсээс шалтгаална.
@@ -10,7 +12,10 @@ Cистемийн архитектур нь дараах хүчин зүйлсэ
 	\item Хэрэглэгчийн мэдрэмтгий өгөгдлийг хадгалдаг бол аюулгүй, халдлагыг тэсвэрлэх чадвартай архитектурыг сонгох хэрэгтэй.
 \end{enumerate}
 
-Даараах хүчин зүйлсүүдийг хамааран (Three-tier) үлгэр загварыг сонголоо. Вэб системийн нийтлэг архитектур бөгөөд танилцуулгын түвшин, хэрэглээний түвшин, мэдээллийн баазын түвшин гэсэн гурван давхаргаас бүрдэнэ. Үзүүлэнгийн түвшин нь хэрэглэгчийн интерфэйсийг зохицуулж, үр дүнг хэрэглэгчдэд харуулдаг. Хэрэглээний давхарга нь системийн логикийг зохицуулж, мэдээллийн сантай харьцдаг. Өгөгдлийн сангийн давхарга нь системийн өгөгдлийг хадгалдаг.
+Дараах хүчин зүйлсүүдийг хамааран (Three-tier) үлгэр загварыг сонголоо. Вэб системийн нийтлэг архитектур бөгөөд танилцуулгын түвшин, хэрэглээний түвшин, мэдээллийн баазын түвшин гэсэн гурван давхаргаас бүрдэнэ.
+
+\clearpage
+Үзүүлэнгийн түвшин нь хэрэглэгчийн интерфэйсийг зохицуулж, үр дүнг хэрэглэгчдэд харуулдаг. Хэрэглээний давхарга нь системийн логикийг зохицуулж, мэдээллийн сантай харьцдаг. Өгөгдлийн сангийн давхарга нь системийн өгөгдлийг хадгалдаг.
 
 \begin{figure}[h]
 	\centering
@@ -31,6 +36,37 @@ Front-end хэсэг Next.js дээр хөгжүүлэлт хийгдэх бол
 \end{figure}
 
 \pagebreak
+
+\section{Дарааллийн диаграм}
+Энэхүү дарааллын диаграмм нь тест эхлэх үеийн UI, Server, Firebase хоорондын үйлчлэл, мессежийн урсгалын дарааллийг харуулна.
+
+\subsection{Дарааллийн диаграм}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12cm]{images/sequence_diagram.png}
+	\caption{Дарааллийн диаграм}
+	\label{fig:usecase}
+\end{figure}
+\pagebreak
+
+\textbf{Дарааллийн диаграмын тайлбар}
+
+\begin{itemize}
+	\item \textbf{startGame() -} Хэрэглэгч текстийг эхлүүлнэ.
+	\item \textbf{getWord(word) -} Сервер firebase - с шинээр өгүүлбэр авахын тулд хүсэлт явуулна.
+	\item \textbf{sendWord(word) -} Хүсэлт амжиллтай тохиолдолд тухайн өгүүлбэрийг буцаан явуулна.
+	\item \textbf{displayWord(word) -} Ирсэн өгүүлбэрийг хэрэглэгчийн дэлгэцэд харуулна. 
+	\item \textbf{startTimer() -} Өгүүлбэр амжиллтай ирсэн тохиолдолд цагийг эхлүүлнэ. 
+	\item \textbf{userTyped(word) -} Хэрэглэгчийн бичсэн үсгийг серверлүү явуулна.
+	\item \textbf{updateScore() -} Серверээс хэрэглэгчийн мэдээллийг шинэчлэнэ.
+	\item \textbf{gameEnd() -} Цаг дууссан тохиолдолд текстийг дуусгана.
+	\item \textbf{sendData(userData) -}  Хэрэглэгчийн мэдээллийг (wpm, time, accuracy) серверлүү явуулна. 
+	\item \textbf{saveData(userData) -} Хэрэглэгчийн мэдээллийг firebase дээр хадгална.
+	\item \textbf{displayResilts(userData) -} Хэрэглэгчийн мэдээллийг модал загвараар харуулна.
+\end{itemize}
+
+\pagebreak
+
 \section{Ажлын явцын диаграм}
 
 \subsection{Ажлын явцын диаграм}
@@ -88,91 +124,33 @@ Front-end хэсэг Next.js дээр хөгжүүлэлт хийгдэх бол
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=10cm]{images/interfaces/ver1/playpage.png}
-	\caption{Холбоосуудаа оруулах форм}
+	\caption{Уралдах хэсэг}
 	\label{fig:interface-v1-02}
 \end{figure}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=10cm]{images/interfaces/ver1/leaderboard.png}
-	\caption{Оруулсан холбоосуудыг нийтлэсний дараах хуудас}
+	\caption{Тэргүүлэгчдийн хэсэг}
 	\label{fig:interface-v1-03}
 \end{figure}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=10cm]{images/interfaces/ver1/profilepage.png}
-	\caption{Оруулсан нийтлэл бусад хүмүүст харагдах байдал}
+	\caption{Профайл хэсэг}
 	\label{fig:interface-v1-04}
 \end{figure}
 
 \clearpage
-% \textbf{Prototype хувилбар дээрээ Usability туршилт хийсэн нь}
 
-% Дараа нь Prototype хувилбар дээрээ Usability буюу хэрэглэхэд тухтай байдлын туршилтыг сонгож авсан хоёр хэрэглэгч дээрээ хийлгэж уг гаргасан дизайн дээрх үүссэн асуудлыг тодорхойлж, хэрэглэгчээс санал хүсэлтийг аван дараагийн гаргах дизайныхаа ерөнхий шаардлагуудыг тодорхойлов. Үүнээс дурдвал:
-
-% \begin{itemize}
-% 	\item UI загварын хувьд концептийг дахин сайжруулах
-% 	\item Бусад хүмүүсийн оруулсан холбоосыг нийтэд нь харуулах
-% 	\item Оруулж буй холбоосыг ангилалтай байлгах
-% 	\item Платформ дээр бүртгэлтэй бусад хэрэглэгчдийг харуулах
-% \end{itemize}
-
-% Иймд уг шаардлага дээрээ үндэслэн эцсийн байдлаар вебийнхээ UX/UI дизайныг гаргах шаардлагатай.
-
-% \textbf{Redesign буюу зурсан дизайнаа дахин сайжруулсан нь}
-
-% UX/UI гүйцэтгэлийн хамгийн сүүлийн шатанд нийт 12 хуудас дизайныг \footnote{UX/UI дизайны сүүлийн хувилбар \url{https://www.figma.com/proto/EL2nOGmToBRVxHNuZwH661}} холбож зурсан ба өмнөх дизайны процесстой адилаар Prototype хувилбар гаргаж эцсийн хэрэглэгчдээрээ Usability туршилтыг хийж дараагийн шат болох код хөгжүүлэлтийн шатыг эхлүүлэхэд бэлэн боллоо. Нийт зурсан хуудсаасаа 6 хуудсыг онцлон харуулж, User Expierence дизайныхаа шийдлийг тайлбарлалаа. Бусад зурсан хуудсыг доор байгаа хавсралтаас харах боломжтой. 
-
-% \begin{figure}[h]
-% 	\centering
-% 	\includegraphics[width=10cm]{images/interfaces/components.png}
-% 	\caption{Ашигласан компонентуудын жишээ}
-% 	\label{fig:component}
-% \end{figure}
-
-% \begin{figure}[h]
-% 	\centering
-% 	\includegraphics[width=10cm]{images/interfaces/home-screen.png}
-% 	\caption{Нэвтэрсний дараах нүүр хуудас}
-% 	\label{fig:homescreen}
-% \end{figure}
-
-% \begin{figure}[h]
-% 	\centering
-% 	\includegraphics[width=10cm]{images/interfaces/topics.png}
-% 	\caption{Бүх холбоосуудыг төрлөөр нь шүүж харах хуудас}
-% 	\label{fig:topics}
-% \end{figure}
-
-% \begin{figure}[h]
-% 	\centering
-% 	\includegraphics[width=10cm]{images/interfaces/people.png}
-% 	\caption{Хэрэглэгчдийн жагсаалт харагдах хуудас}
-% 	\label{fig:people}
-% \end{figure}
-
-% \begin{figure}[h]
-% 	\centering
-% 	\includegraphics[width=10cm]{images/interfaces/profile.png}
-% 	\caption{Бусдын профайлыг харах хуудас}
-% 	\label{fig:profile}
-% \end{figure}
-
-% \begin{figure}[h]
-% 	\centering
-% 	\includegraphics[width=10cm]{images/interfaces/grouped-link.png}
-% 	\caption{Бүлэг холбоос доторх холбоосуудыг харах хуудас}
-% 	\label{fig:grouped}
-% \end{figure}
-
-\clearpage
 \section{Өгөгдлийн сан}
+Өгөгдлийн сангийн хувьд манай веб апп нь Firebase realtime өгөгдлийн бааз ашиглаж байгаа учир NoSQL төрлийн өгөгдлийн баазад өгөгдлөө ”JSON” хэлбэрээр ”Firebase realtime” өгөгдлийн баазд хадгалах юм.
 
 \subsection{Өгөгдлийн сангийн диаграм}
 \begin{figure}[h]
 	\centering
-	\includesvg[width=15cm]{images/rd_schema.png}
+	\includegraphics[width=17cm]{images/db_structure.png}
 	\caption{Системийн баазын бүтэц}
 	\label{fig:erd}
 \end{figure}

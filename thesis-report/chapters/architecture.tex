@@ -72,7 +72,7 @@ Front-end хэсэг Next.js дээр хөгжүүлэлт хийгдэх бол
 \subsection{Ажлын явцын диаграм}
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=15cm]{images/usecase.png}
+	\includegraphics[width=18cm]{images/usecase.png}
 	\caption{Ажлын явцын диаграм}
 	\label{fig:usecase}
 \end{figure}
@@ -114,20 +114,26 @@ Front-end хэсэг Next.js дээр хөгжүүлэлт хийгдэх бол
 
 Вебийн гол процессийг илэрхийлэх 4 зургийг орууллаа. Бусад хэсгийг хавсралтаас \footnote{Зурсан интерфейс дизайн \url{https://shorturl.at/djwAT}} үзэх боломжтой.
 
+\pagebreak
+Хэрэглэгчийг угтан авах анхны нүүр хуудас. /тоглох, ранк, тухай навигацийг багтаасан болно./
+
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=10cm]{images/interfaces/ver1/mainpage.png}
+	\includegraphics[width=9cm]{images/interfaces/ver1/mainpage.png}
 	\caption{Нүүр хуудас}
 	\label{fig:interface-v1-01}
 \end{figure}
 
+Хэрэглэгч хоорондоо уралдах түүнийг бодит хугацаанд харуулах хуудас. Хэрэглэгчийн хурд болон нарийвчлалийг харах боломжтой.  
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=10cm]{images/interfaces/ver1/playpage.png}
+	\includegraphics[width=9cm]{images/interfaces/ver1/playpage.png}
 	\caption{Уралдах хэсэг}
 	\label{fig:interface-v1-02}
 \end{figure}
 
+\pagebreak
+Нийт хэрэглэгчдийг үзүүлэлтээр нь эрэмбэлж харуулах хуудас. Мэдээллүүддийг 7 хоног, сар, жилээр филтэр хийн харах боломжтой.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=10cm]{images/interfaces/ver1/leaderboard.png}
@@ -135,6 +141,7 @@ Front-end хэсэг Next.js дээр хөгжүүлэлт хийгдэх бол
 	\label{fig:interface-v1-03}
 \end{figure}
 
+Хэрэглэгч хэрэв шивэх дасгалуудийг амжилттай хийн дуусгасан бол өөрийн үзүүлэлтүүдийг харах хуудас.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=10cm]{images/interfaces/ver1/profilepage.png}
@@ -199,7 +206,8 @@ Front-end хэсэг Next.js дээр хөгжүүлэлт хийгдэх бол
 \textbf{Өгөгдлийн сангийн хүснэгтүүдийн тайлбар}
 
 \begin{table}[h]
-	\caption{User хүснэгт}
+	\caption{User хүснэгт / 
+	Хэрэглэгч бүртгүүлэх үед үүсэх хүснэгт}
 	\begin{tabular}{|l|l|l|p{8cm}|}
 		\hline
 		№ & Талбарын нэр & Өгөгдлийн төрөл & Тайлбар                                                                                    \\ \hline
@@ -209,12 +217,15 @@ Front-end хэсэг Next.js дээр хөгжүүлэлт хийгдэх бол
 		4 & password     & varchar         & Хэрэглэгчийн гараас оруулж өгсөн нууц үгийг encrypt-лэж /hash/ уг хэсэгт хадгална          \\ \hline
 		5 & profile\_img & link            & Хэрэглэгчийн оруулж өгсөн зургийг сервер дээр хадгалж, замыг нь энэ хэсэгт хадгална        \\ \hline
 		6 & created\_at  & timestamp       & Хэрэглэгчийн хаяг үүссэн хугацааг серверээс авч хадгална                                   \\ \hline
-		7 & updated\_at  & timestamp       & Хэрэглэгчийн хаяг өөрчлөгдсөн хугацаагсерверээс авч хадгална                               \\ \hline
+		7 & updated\_at  & timestamp       & Хэрэглэгчийн хаяг өөрчлөгдсөн хугацааг серверээс авч хадгална                               \\ \hline
 	\end{tabular}
 \end{table}
 
+\clearpage
+
+
 \begin{table}[h]
-	\caption{User Statistics Table}
+	\caption{User Statistics Table / Хэрэглэгч тест өгөх үед үүсэх хүснэгт. Хэрэглэгчийн статистикийг хадгална.}
 	\begin{tabular}{|l|l|l|p{8cm}|}
 		\hline
 		№  & Талбарын нэр   & Өгөгдлийн төрөл & Тайлбар                                                                       \\ \hline
@@ -231,8 +242,10 @@ Front-end хэсэг Next.js дээр хөгжүүлэлт хийгдэх бол
 	\end{tabular}
 \end{table}
 
+
+
 \begin{table}[h]
-	\caption{Race Table}
+	\caption{Race Table / Хэрэглэгч тест өгөх үед үүсэх хүснэгт. Уралдааны мэдээллийг хадгална.}
 	\begin{tabular}{|l|l|l|p{8cm}|}
 		\hline
 		№ & Талбарын нэр   & Өгөгдлийн төрөл & Тайлбар                                                                             \\ \hline
@@ -246,7 +259,7 @@ Front-end хэсэг Next.js дээр хөгжүүлэлт хийгдэх бол
 
 
 \begin{table}[h]
-	\caption{Race Type Table}
+	\caption{Race Type Table / Уралдааны төрлийг хадгалах хүснэгт.}
 	\begin{tabular}{|l|l|l|p{8cm}|}
 		\hline
 		№ & Талбарын нэр & Өгөгдлийн төрөл & Тайлбар                                                               \\ \hline
@@ -255,8 +268,9 @@ Front-end хэсэг Next.js дээр хөгжүүлэлт хийгдэх бол
 	\end{tabular}
 \end{table}
 
+
 \begin{table}[h]
-	\caption{Race Text Table}
+	\caption{Race Text Table / Уралдааны өгүүлбэрийг хадгалах хүснэгт.}
 	\begin{tabular}{|l|l|l|p{8cm}|}
 		\hline
 		№ & Талбарын нэр & Өгөгдлийн төрөл & Тайлбар                                                                               \\ \hline
@@ -267,7 +281,6 @@ Front-end хэсэг Next.js дээр хөгжүүлэлт хийгдэх бол
 		5 & updated\_at  & timestamp       & Хэрэглэгчийн хаяг өөрчлөгдсөн хугацааг серверээс авч хадгална                         \\ \hline
 	\end{tabular}
 \end{table}
-
 
 
 \clearpage

@@ -197,7 +197,7 @@ const StatisticsPage = () => {
             </Grid>
             <Grid item xs={4} className={style.secondCardFooter}>
               <StatCard
-                value={1}
+                value={"7/13"}
                 fieldName="Одоогийн зэрэглэл"
                 backgroundColor="#D3D3D3"
               />

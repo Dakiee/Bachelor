@@ -21,7 +21,7 @@ const StatisticsPage = () => {
   const [avgWFM, setAvgWFM] = useState(0);
   const [highestWFM, setHighestWFM] = useState(0);
   const [totalTime, setTotalTime] = useState("");
-  const [averageAccuracy, setAverageAccuracy] = useState(0);
+  const [averageAccuracy, setAverageAccuracy] = useState("");
   const [testCount, setTestCount] = useState("");
 
   useEffect(() => {
@@ -72,11 +72,13 @@ const StatisticsPage = () => {
           ) / filteredData.length;
 
         const totalData = filteredData.length;
-        const averageAccuracy =
+
+        const averageAccuracy = (
           filteredData.reduce(
             (sum: any, entry: any) => sum + parseFloat(entry.avg_accuracy),
             0
-          ) / totalData;
+          ) / totalData
+        ).toFixed(2);
 
         setTotalTime(total_time);
         setHighestWFM(highest_wpm);

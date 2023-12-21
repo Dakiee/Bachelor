@@ -23,6 +23,8 @@ const StatisticsPage = () => {
   const [totalTime, setTotalTime] = useState("");
   const [averageAccuracy, setAverageAccuracy] = useState("");
   const [testCount, setTestCount] = useState("");
+  const [userPlace, setUserPlace] = useState("");
+  const [totalData, setTotalData] = useState("");
 
   useEffect(() => {
     const originalName = session?.data?.user?.email;
@@ -80,6 +82,14 @@ const StatisticsPage = () => {
           ) / totalData
         ).toFixed(2);
 
+        const sortedUsers = data.slice().sort((a:any, b:any) => b.highest_wpm - a.highest_wpm);
+
+        const userIndex = sortedUsers.findIndex((entry:any) => entry.user_email === email);
+
+        const userPlace = userIndex + 1;
+
+        setUserPlace(userPlace);
+        setTotalData(totalData);
         setTotalTime(total_time);
         setHighestWFM(highest_wpm);
         setAvgWFM(average_wpm);
